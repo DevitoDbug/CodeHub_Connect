@@ -1,0 +1,18 @@
+// vite.config.js
+import { defineConfig } from "file:///C:/Users/DAVID/Desktop/web-scripts2.0/OpenSource/chattApp2/node_modules/vite/dist/node/index.js";
+import react from "file:///C:/Users/DAVID/Desktop/web-scripts2.0/OpenSource/chattApp2/node_modules/@vitejs/plugin-react/dist/index.mjs";
+import sass from "file:///C:/Users/DAVID/Desktop/web-scripts2.0/OpenSource/chattApp2/node_modules/sass/sass.node.mjs";
+var vite_config_default = defineConfig({
+  css: {
+    preprocessorOptions: {
+      sass: {
+        implementation: sass
+      }
+    }
+  },
+  plugins: [react()]
+});
+export {
+  vite_config_default as default
+};
+//# sourceMappingURL=data:application/json;base64,ewogICJ2ZXJzaW9uIjogMywKICAic291cmNlcyI6IFsidml0ZS5jb25maWcuanMiXSwKICAic291cmNlc0NvbnRlbnQiOiBbImNvbnN0IF9fdml0ZV9pbmplY3RlZF9vcmlnaW5hbF9kaXJuYW1lID0gXCJDOlxcXFxVc2Vyc1xcXFxEQVZJRFxcXFxEZXNrdG9wXFxcXHdlYi1zY3JpcHRzMi4wXFxcXE9wZW5Tb3VyY2VcXFxcY2hhdHRBcHAyXCI7Y29uc3QgX192aXRlX2luamVjdGVkX29yaWdpbmFsX2ZpbGVuYW1lID0gXCJDOlxcXFxVc2Vyc1xcXFxEQVZJRFxcXFxEZXNrdG9wXFxcXHdlYi1zY3JpcHRzMi4wXFxcXE9wZW5Tb3VyY2VcXFxcY2hhdHRBcHAyXFxcXHZpdGUuY29uZmlnLmpzXCI7Y29uc3QgX192aXRlX2luamVjdGVkX29yaWdpbmFsX2ltcG9ydF9tZXRhX3VybCA9IFwiZmlsZTovLy9DOi9Vc2Vycy9EQVZJRC9EZXNrdG9wL3dlYi1zY3JpcHRzMi4wL09wZW5Tb3VyY2UvY2hhdHRBcHAyL3ZpdGUuY29uZmlnLmpzXCI7aW1wb3J0IHsgZGVmaW5lQ29uZmlnIH0gZnJvbSAndml0ZSdcbmltcG9ydCByZWFjdCBmcm9tICdAdml0ZWpzL3BsdWdpbi1yZWFjdCdcbmltcG9ydCBzYXNzIGZyb20gJ3Nhc3MnXG5cbi8vIGh0dHBzOi8vdml0ZWpzLmRldi9jb25maWcvXG5leHBvcnQgZGVmYXVsdCBkZWZpbmVDb25maWcoe1xuICBjc3M6IHtcbiAgICBwcmVwcm9jZXNzb3JPcHRpb25zOiB7XG4gICAgICBzYXNzOiB7XG4gICAgICAgIGltcGxlbWVudGF0aW9uOnNhc3MsXG4gICAgICB9XG4gICAgfVxuICB9LFxuICBwbHVnaW5zOiBbcmVhY3QoKV0sXG59KVxuIl0sCiAgIm1hcHBpbmdzIjogIjtBQUE4VyxTQUFTLG9CQUFvQjtBQUMzWSxPQUFPLFdBQVc7QUFDbEIsT0FBTyxVQUFVO0FBR2pCLElBQU8sc0JBQVEsYUFBYTtBQUFBLEVBQzFCLEtBQUs7QUFBQSxJQUNILHFCQUFxQjtBQUFBLE1BQ25CLE1BQU07QUFBQSxRQUNKLGdCQUFlO0FBQUEsTUFDakI7QUFBQSxJQUNGO0FBQUEsRUFDRjtBQUFBLEVBQ0EsU0FBUyxDQUFDLE1BQU0sQ0FBQztBQUNuQixDQUFDOyIsCiAgIm5hbWVzIjogW10KfQo=
