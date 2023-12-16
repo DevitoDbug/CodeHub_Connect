@@ -17,7 +17,7 @@ const App = () => {
   };
   return (
     <CurrentPageContexProvider>
-      <div className=" flex h-full w-screen items-center justify-center">
+      <div className=" flex h-[100svh] w-screen items-center justify-center">
         <BrowserRouter>
           <Routes>
             <Route path="/*">
