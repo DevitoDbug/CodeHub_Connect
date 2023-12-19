@@ -8,7 +8,7 @@ const Login = () => {
   //navigate to home
   const navigate = useNavigate();
 
-  const handleGitHubLogin = async () => {
+  const handleSignIn = async () => {
     const provider = new GithubAuthProvider();
     const result = await signInWithPopup(auth, provider);
     console.log({
@@ -42,11 +42,13 @@ const Login = () => {
     }
   };
 
+  const handleLogin = async () => {};
+
   return (
     <div className="flex h-[100svh] w-full flex-col items-center justify-center gap-3 bg-C_LightBlue text-lg md:h-[40%] md:w-[60%] md:gap-3 md:rounded-xl md:shadow-xl lg:h-[60%] lg:w-[30%]">
       <h2 className="text-xl text-C_TextBlack md:text-2xl lg:text-lg">Login</h2>
       <button
-        onClick={handleGitHubLogin}
+        onClick={handleSignIn}
         className="flex items-center justify-center gap-2 rounded-md bg-C_TextBlack p-2 text-white shadow-lg "
       >
         <FontAwesomeIcon className="text-xl" icon={faGithub} />
