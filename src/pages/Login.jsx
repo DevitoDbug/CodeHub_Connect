@@ -11,17 +11,12 @@ const Login = () => {
   const handleSignIn = async () => {
     const provider = new GithubAuthProvider();
     const result = await signInWithPopup(auth, provider);
-    console.log({
-      email: result.user.email,
-      uid: result.user.uid,
-      photoURL: result.user.photoURL,
-      displayName: result.user.reloadUserInfo.providerUserInfo[0].screenName,
-    });
+    console.log(result);
 
     //Add user to the users collection
     try {
       await setDoc(doc(db, 'users', result.user.uid), {
-        uid: result.user.uid,
+        uid: result.user.reloadUserInfo.providerUserInfo[0].rawId,
         displayName: result.user.displayName,
         nickName: result.user.reloadUserInfo.providerUserInfo[0].screenName,
         email: result.user.email,
