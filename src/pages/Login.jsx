@@ -36,13 +36,11 @@ const Login = () => {
       await setDoc(doc(db, 'userChats', result.user.uid), {});
 
       // Navigate to the home page after creating the userChat document
-      navigate('/');
     } catch (e) {
       console.log('Adding user chat to firestore error:\n', e);
     }
+    navigate('/');
   };
-
-  const handleLogin = async () => {};
 
   return (
     <div className="flex h-[100svh] w-full flex-col items-center justify-center gap-3 bg-C_LightBlue text-lg md:h-[40%] md:w-[60%] md:gap-3 md:rounded-xl md:shadow-xl lg:h-[60%] lg:w-[30%]">
