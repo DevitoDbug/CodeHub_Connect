@@ -69,18 +69,14 @@ const Contact = ({
       await setDoc(doc(db, 'chats', combinedId), { message: [] });
       //Adding user to userChats for both communicators
       try {
-        await updateDoc(
-          doc(db, 'userChats', currentUserDetails.uid),
-          {
-            [combinedId + '.userInfo']: {
-              uid: user.uid,
-              firstName: user.firstName,
-              secondName: user.secondName,
-              photoURL: user.photoURL,
-            },
-            [combinedId + '.date']: serverTimestamp(),
+        await updateDoc(doc(db, 'userChats', currentUserDetails.uid), {
+          [combinedId + '.userInfo']: {
+            uid: user.uid,
+            firstName: user.displayName,
+            photoURL: user.photoURL,
           },
-        );
+          [combinedId + '.date']: serverTimestamp(),
+        });
       } catch (error) {
         console.log(error);
       }
@@ -126,7 +122,7 @@ const Contact = ({
               isSelected ? 'text-C_TextWhite' : 'text-C_TextBlack'
             }`}
           >
-            {user.firstName}
+            {user.displayName}
           </span>
           <span
             className={`text-[0.625rem] font-light  ${

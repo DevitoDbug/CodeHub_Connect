@@ -21,7 +21,7 @@ const Message = ({ data, message, displayMetaData }) => {
         <span className="sms-user-name ">
           {currentUser.uid === message.senderId
             ? currentUser.displayName
-            : data?.firstName}
+            : data?.displayName}
         </span>
       )}
 
@@ -53,17 +53,11 @@ const Message = ({ data, message, displayMetaData }) => {
               }`}
             >
               {message.text}
-              <span>
-                {message.date.toDate().toLocaleDateString('en-US')}
-              </span>
+              <span>{message.date.toDate().toLocaleDateString('en-US')}</span>
             </div>
           )}
           {message.imageURL && (
-            <img
-              src={message.imageURL}
-              alt="pic"
-              className="block "
-            />
+            <img src={message.imageURL} alt="pic" className="block " />
           )}
         </div>
       </div>

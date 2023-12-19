@@ -4,12 +4,13 @@ import { getStorage } from 'firebase/storage';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyApquyBndV10M92v4lVivq-QQ3_uvVlzX0',
-  authDomain: 'artlife4-fc1df.firebaseapp.com',
-  projectId: 'artlife4-fc1df',
-  storageBucket: 'artlife4-fc1df.appspot.com',
-  messagingSenderId: '683362316164',
-  appId: '1:683362316164:web:692195b016364398a937d1',
+  apiKey: 'AIzaSyDWyJuIaQvXTIxuhs8ot5YgGtYvGmnDd0E',
+  authDomain: 'codehub-connect.firebaseapp.com',
+  projectId: 'codehub-connect',
+  storageBucket: 'codehub-connect.appspot.com',
+  messagingSenderId: '392010543999',
+  appId: '1:392010543999:web:d34e7a50d909250ce6a04a',
+  measurementId: 'G-H9ZMYNXMH4',
 };
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);

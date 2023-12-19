@@ -15,8 +15,7 @@ const Login = () => {
       email: result.user.email,
       uid: result.user.uid,
       photoURL: result.user.photoURL,
-      nickName: result.user.reloadUserInfo.providerUserInfo[0].screenName,
-      displayName: result.user.displayName,
+      displayName: result.user.reloadUserInfo.providerUserInfo[0].screenName,
     });
 
     //Add user to the users collection
