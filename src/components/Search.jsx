@@ -4,15 +4,20 @@ import { faClose } from '@fortawesome/free-solid-svg-icons';
 import { useContext } from 'react';
 import { SearchContext } from '../context/SearchContext';
 import Contact from './Contact';
-import { collection, query, getDocs } from 'firebase/firestore';
-import { db } from '../firebase';
 import { LoginContext } from '../context/AuthContext';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 
 const Search = () => {
   const { currentUser } = useContext(LoginContext);
   const [, setSearchOpen] = useContext(SearchContext);
   const [isActive, setIsActive] = useState(null);
-  const [allContacts, setAllContacts] = useState([]); // [ {uid: , userInfo: {firstName: , lastName: , email: , photoURL: }}, ...
+  const [followers, setFollowers] = useState([]);
+  const [following, setFollowing] = useState([]);
+  const [githubAccessToken, setGithubAccessToken] = useState(null);
+
+  //Get the github access token
+  //setGithubAccessToken(currentUser.accessToken);
 
   const handleCloseSearch = () => {
     setSearchOpen(false);
@@ -22,26 +27,60 @@ const Search = () => {
     setIsActive(id);
   };
 
-  const handleGetAllContacts = async () => {
-    const q = query(collection(db, 'users'));
-    setAllContacts([]);
-    try {
-      //Searching for a user from firebase
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        setAllContacts((prevState) => [
-          ...prevState,
-          { uid: doc.id, userInfo: doc.data() },
-        ]);
-      });
-    } catch (e) {
-      console.log('Fetching data from firestore error: ', e);
-    }
-  };
+  const accessToken = currentUser.accessToken;
+  console.log(currentUser);
+
+  // Fetch followers
+  const {
+    data: followersData,
+    isLoading: followersLoading,
+    isError: followersError,
+  } = useQuery({
+    queryKey: ['GithubContacts', 'followers'],
+    queryFn: () =>
+      axios(
+        `https://api.github.com/users/${currentUser.displayName}/followers`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        },
+      ),
+  });
+
+  // Fetch following
+  const {
+    data: followingData,
+    isLoading: followingLoading,
+    isError: followingError,
+  } = useQuery({
+    queryKey: ['GithubContacts', 'following'],
+    queryFn: () =>
+      axios(
+        `https://api.github.com/users/${currentUser.displayName}/following`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        },
+      ),
+  });
 
   useEffect(() => {
-    handleGetAllContacts();
-  }, []);
+    if (followersData) {
+      setFollowers(followersData.data);
+    }
+  }, [followersData]);
+
+  useEffect(() => {
+    if (followingData) {
+      setFollowing(followingData.data);
+    }
+  }, [followingData]);
+
+  console.log(followers);
+  console.log(following);
+
   return (
     <div className="absolute left-[10%] top-[10%] flex h-[40%] w-[80%] flex-col items-center rounded-lg bg-[#bae9f8] px-1 py-2 shadow-lg md:left-[30%] md:w-[50%] lg:left-[30%] lg:top-[20%] lg:h-[50%] lg:w-[40%] ">
       <button
@@ -51,17 +90,12 @@ const Search = () => {
         <FontAwesomeIcon icon={faClose} />
       </button>
       <div className="h-full w-full overflow-y-scroll bg-[#bae9f8f5]">
-        {allContacts.map(
-          (contact) =>
-            contact.uid !== currentUser.uid && (
-              <Contact
+        {/* <Contact
                 key={contact.uid}
                 user={contact.userInfo}
                 isSelected={isActive === contact.uid}
                 onClick={() => handleContactClick(contact.uid)}
-              />
-            ),
-        )}
+              /> */}
       </div>
     </div>
   );

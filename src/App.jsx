@@ -6,6 +6,8 @@ import { useContext } from 'react';
 import { LoginContext } from './context/AuthContext';
 import CurrentPageContexProvider from './context/CurrentPageContex';
 
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
 const App = () => {
   const currentUser = useContext(LoginContext);
   const ProtectedRoute = ({ children }) => {
@@ -14,27 +16,33 @@ const App = () => {
     }
     return children;
   };
+
+  // Create a client
+  const queryClient = new QueryClient();
+
   return (
-    <CurrentPageContexProvider>
-      <div className=" flex h-[100svh] w-screen items-center justify-center overflow-hidden">
-        <BrowserRouter>
-          <Routes>
-            <Route path="/*">
-              <Route
-                index
-                element={
-                  <ProtectedRoute>
-                    <Home />
-                  </ProtectedRoute>
-                }
-              />
-              <Route path="login" element={<Login />} />
-              <Route path="*" element={<Error />} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </div>
-    </CurrentPageContexProvider>
+    <QueryClientProvider client={queryClient}>
+      <CurrentPageContexProvider>
+        <div className=" flex h-[100svh] w-screen items-center justify-center overflow-hidden">
+          <BrowserRouter>
+            <Routes>
+              <Route path="/*">
+                <Route
+                  index
+                  element={
+                    <ProtectedRoute>
+                      <Home />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="login" element={<Login />} />
+                <Route path="*" element={<Error />} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </div>
+      </CurrentPageContexProvider>
+    </QueryClientProvider>
   );
 };
 export default App;
