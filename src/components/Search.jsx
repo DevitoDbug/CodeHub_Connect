@@ -7,17 +7,16 @@ import Contact from './Contact';
 import { LoginContext } from '../context/AuthContext';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import { GithubAuthProvider } from '@firebase/auth';
 
 const Search = () => {
   const { currentUser } = useContext(LoginContext);
+  const { accessToken } = useContext(LoginContext);
+
   const [, setSearchOpen] = useContext(SearchContext);
   const [isActive, setIsActive] = useState(null);
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
-  const [githubAccessToken, setGithubAccessToken] = useState(null);
-
-  //Get the github access token
-  //setGithubAccessToken(currentUser.accessToken);
 
   const handleCloseSearch = () => {
     setSearchOpen(false);
@@ -26,9 +25,6 @@ const Search = () => {
   const handleContactClick = (id) => {
     setIsActive(id);
   };
-
-  const accessToken = currentUser.accessToken;
-  console.log(currentUser);
 
   // Fetch followers
   const {
@@ -67,14 +63,22 @@ const Search = () => {
   });
 
   useEffect(() => {
-    if (followersData) {
+    if (
+      followersData &&
+      followersData.data &&
+      Array.isArray(followersData.data)
+    ) {
       setFollowers(followersData.data);
     }
   }, [followersData]);
 
   useEffect(() => {
-    if (followingData) {
-      setFollowing(followingData.data);
+    if (
+      followingData &&
+      followingData.data &&
+      Array.isArray(followingData.data.data)
+    ) {
+      setFollowing(followingData.data.data);
     }
   }, [followingData]);
 

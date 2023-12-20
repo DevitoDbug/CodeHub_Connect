@@ -5,7 +5,8 @@ import { auth } from '../firebase';
 export const LoginContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState({});
+  const [currentUser, setCurrentUser] = useState(null);
+  const [accessToken, setAccessToken] = useState(null);
 
   //checking for changes in current user
   useEffect(() => {
@@ -18,7 +19,7 @@ export const AuthContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <LoginContext.Provider value={{ currentUser }}>
+    <LoginContext.Provider value={{ currentUser, accessToken, setAccessToken }}>
       {children}
     </LoginContext.Provider>
   );

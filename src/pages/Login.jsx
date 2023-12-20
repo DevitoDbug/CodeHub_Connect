@@ -4,14 +4,21 @@ import { GithubAuthProvider, signInWithPopup } from 'firebase/auth';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import { doc, setDoc } from 'firebase/firestore';
+import { useContext } from 'react';
+import { LoginContext } from '../context/AuthContext';
 const Login = () => {
   //navigate to home
   const navigate = useNavigate();
 
+  const { setAccessToken } = useContext(LoginContext);
+
   const handleSignIn = async () => {
     const provider = new GithubAuthProvider();
     const result = await signInWithPopup(auth, provider);
-    console.log(result);
+
+    const credential = GithubAuthProvider.credentialFromResult(result);
+    const token = credential.accessToken;
+    setAccessToken(token);
 
     //Add user to the users collection
     try {
