@@ -10,23 +10,28 @@ import { LoginContext } from '../context/AuthContext';
 import { useFetchFollowers, useFetchFollowing } from '../api/hooks';
 
 const Search = () => {
- 
   const { currentUser } = useContext(LoginContext);
   const [, setSearchOpen] = useContext(SearchContext);
   const [isActive, setIsActive] = useState(null);
   const [allContacts, setAllContacts] = useState([]); // [ {uid: , userInfo: {firstName: , lastName: , email: , photoURL: }}, ...
-const [followers,setFollowers]=React.useState([]) 
-const [following,setFollowing]=React.useState([])
-const {data,isError,isLoading,error,status}=useFetchFollowers(currentUser?.reloadUserInfo?.screenName)
-const {data:followingData,status:followingStatus, error:followingError}=useFetchFollowing(currentUser?.reloadUserInfo?.screenName)
-useEffect(()=>{
-if(followingStatus==='success'){
-  console.log(followingData)
-}
-if(followingStatus==="error"){
-  console.log(followingError)
-}
-},[status])
+  const [followers, setFollowers] = useState([]);
+  const [following, setFollowing] = useState([]);
+  const { data, isError, isLoading, error, status } = useFetchFollowers(
+    currentUser?.reloadUserInfo?.screenName,
+  );
+  const {
+    data: followingData,
+    status: followingStatus,
+    error: followingError,
+  } = useFetchFollowing(currentUser?.reloadUserInfo?.screenName);
+  useEffect(() => {
+    if (followingStatus === 'success') {
+      console.log(followingData);
+    }
+    if (followingStatus === 'error') {
+      console.log(followingError);
+    }
+  }, [status]);
   const handleCloseSearch = () => {
     setSearchOpen(false);
   };
