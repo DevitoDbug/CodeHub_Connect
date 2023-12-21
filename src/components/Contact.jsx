@@ -1,15 +1,11 @@
 import React, { useContext } from 'react';
 import { SearchContext } from '../context/SearchContext';
 import {
-  collection,
   doc,
   getDoc,
-  getDocs,
-  query,
   serverTimestamp,
   setDoc,
   updateDoc,
-  where,
 } from 'firebase/firestore';
 import { db } from '../firebase';
 import { LoginContext } from '../context/AuthContext';
@@ -25,8 +21,10 @@ const Contact = ({
 }) => {
   const [, setSearchPanelOpen] = useContext(SearchContext);
   const { currentUser } = useContext(LoginContext);
-  const currentUserDisplayName = currentUser?.reloadUserInfo?.screenName;
+  const currentUserNickName = currentUser?.reloadUserInfo?.screenName;
   const currentUserUid = currentUser.providerData[0].uid;
+  const currentUserDisplayName = currentUser?.reloadUserInfo?.displayName;
+  const currentUserPhotoURL = currentUser?.reloadUserInfo?.photoURL;
 
   const { dispatch } = useContext(ChatContext);
   const { scrollToMessageSection } = useContext(NavContext);
@@ -46,23 +44,6 @@ const Contact = ({
     //setting chat context
     dispatch({ type: 'CHANGE_CHAT_RECIPIENT', payload: user });
 
-    //Getting info about the currently loged in  user
-    let currentUserDetails;
-    const q = query(
-      collection(db, 'users'),
-      where('nickName', '==', currentUserDisplayName),
-    );
-
-    try {
-      //Searching for a user from firebase
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        currentUserDetails = doc.data();
-      });
-    } catch (e) {
-      console.log('Fetching data from firestore error: ', e);
-    }
-
     //Checking if there exist a chat between user and selected contact
     //Also check if user is trying to make a chat to himself
     const docRef = doc(db, 'chats', combinedId);
@@ -72,7 +53,7 @@ const Contact = ({
       await setDoc(doc(db, 'chats', combinedId), { message: [] });
       //Adding user to userChats for both communicators
       try {
-        await updateDoc(doc(db, 'userChats', currentUserDetails.uid), {
+        await updateDoc(doc(db, 'userChats', currentUserUid), {
           [combinedId + '.userInfo']: {
             uid: user.uid,
             firstName: user.displayName,
@@ -83,13 +64,14 @@ const Contact = ({
       } catch (error) {
         console.log(error);
       }
+
       try {
         await updateDoc(doc(db, 'userChats', user.uid), {
           [combinedId + '.userInfo']: {
-            uid: currentUserDetails.uid,
-            firstName: currentUserDetails.firstName,
-            secondName: currentUserDetails.secondName,
-            photoURL: currentUserDetails.photoURL,
+            uid: currentUserUid,
+            nickName: currentUserNickName,
+            displayName: currentUserDisplayName,
+            photoURL: currentUserPhotoURL,
           },
           [combinedId + '.date']: serverTimestamp(),
         });
