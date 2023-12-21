@@ -5,9 +5,7 @@ import { useContext } from 'react';
 import { SearchContext } from '../context/SearchContext';
 import Contact from './Contact';
 import { LoginContext } from '../context/AuthContext';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
-import { GithubAuthProvider } from '@firebase/auth';
+import { useFetchFollowers, useFetchFollowing } from '../api/hooks';
 
 const Search = () => {
   const { currentUser } = useContext(LoginContext);
@@ -17,6 +15,41 @@ const Search = () => {
   const [isActive, setIsActive] = useState(null);
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
+  const [toggleContactList, setToggleContactList] = useState(true);
+
+  //Followers data
+  const {
+    data: followersData,
+    status: followersStatus,
+    error: followersError,
+  } = useFetchFollowers(currentUser?.reloadUserInfo?.screenName);
+
+  //Following data
+  const {
+    data: followingData,
+    status: followingStatus,
+    error: followingError,
+  } = useFetchFollowing(currentUser?.reloadUserInfo?.screenName);
+
+  //Update followers data
+  useEffect(() => {
+    if (followersStatus === 'success') {
+      setFollowers(Object.values(followersData));
+    }
+    if (followersStatus === 'error') {
+      console.log(followersError);
+    }
+  }, [followersStatus, followersData, followersError]);
+
+  //Update following data
+  useEffect(() => {
+    if (followingStatus === 'success') {
+      setFollowing(Object.values(followingData));
+    }
+    if (followingStatus === 'error') {
+      console.log(followingError);
+    }
+  }, [followingStatus, followingData, followingError]);
 
   const handleCloseSearch = () => {
     setSearchOpen(false);
@@ -26,80 +59,66 @@ const Search = () => {
     setIsActive(id);
   };
 
-  // Fetch followers
-  const {
-    data: followersData,
-    isLoading: followersLoading,
-    isError: followersError,
-  } = useQuery({
-    queryKey: ['GithubContacts', 'followers'],
-    queryFn: () =>
-      axios(
-        `https://api.github.com/users/${currentUser.displayName}/followers`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        },
-      ),
-  });
-
-  // Fetch following
-  const {
-    data: followingData,
-    isLoading: followingLoading,
-    isError: followingError,
-  } = useQuery({
-    queryKey: ['GithubContacts', 'following'],
-    queryFn: () =>
-      axios(
-        `https://api.github.com/users/${currentUser.displayName}/following`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        },
-      ),
-  });
-
   useEffect(() => {
-    if (
-      followersData &&
-      followersData.data &&
-      Array.isArray(followersData.data)
-    ) {
-      setFollowers(followersData.data);
-    }
-  }, [followersData]);
-
-  useEffect(() => {
-    if (
-      followingData &&
-      followingData.data &&
-      Array.isArray(followingData.data.data)
-    ) {
-      setFollowing(followingData.data.data);
-    }
-  }, [followingData]);
-
-  console.log(followers);
-  console.log(following);
-
+    console.log(currentUser.providerData[0]);
+  }, [currentUser]);
   return (
-    <div className="absolute left-[10%] top-[10%] flex h-[40%] w-[80%] flex-col items-center rounded-lg bg-[#bae9f8] px-1 py-2 shadow-lg md:left-[30%] md:w-[50%] lg:left-[30%] lg:top-[20%] lg:h-[50%] lg:w-[40%] ">
-      <button
-        onClick={handleCloseSearch}
-        className="self-end pr-5 text-[150%] font-bold text-C_GreyBorder"
-      >
-        <FontAwesomeIcon icon={faClose} />
-      </button>
+    <div className="absolute left-[10%] top-[10%] flex h-[40%] w-[80%] flex-col items-center rounded-lg bg-[#bae9f8] px-1 py-2 shadow-lg md:left-[30%] md:w-[50%] lg:left-[30%] lg:top-[20%] lg:h-[50%] lg:w-[40%]">
+      <div className="flex w-full items-start justify-between ">
+        <div className="flex gap-2 p-2">
+          <button
+            className="self-end rounded-xl border-2 border-C_BorderLightBlue p-1 text-[110%] font-bold text-C_GreyBorder"
+            onClick={() => setToggleContactList(true)}
+          >
+            Folowers
+          </button>
+          <button
+            className="self-end rounded-xl border-2 border-C_BorderLightBlue p-1 text-[110%] font-bold text-C_GreyBorder"
+            onClick={() => setToggleContactList(false)}
+          >
+            Following
+          </button>
+        </div>
+
+        <button
+          onClick={handleCloseSearch}
+          className=" self-start  pr-2 text-[170%] font-bold text-C_GreyBorder"
+        >
+          <FontAwesomeIcon icon={faClose} />
+        </button>
+      </div>
       <div className="h-full w-full overflow-y-scroll bg-[#bae9f8f5]">
-        {/* <Contact
-                key={contact.uid}
-                user={contact.userInfo}
-                isSelected={isActive === contact.uid}
-                onClick={() => handleContactClick(contact.uid)}
-              /> */}
+        {toggleContactList
+          ? followers?.map((follower) => {
+              return (
+                <Contact
+                  key={follower.id}
+                  user={{
+                    email: ' ',
+                    nickName: follower.login,
+                    photoURL: follower.avatar_url,
+                    uid: follower.id,
+                  }}
+                  isSelected={isActive === follower.id}
+                  onClick={() => handleContactClick(follower.id)}
+                />
+              );
+            })
+          : following?.map((follow) => {
+              return (
+                <Contact
+                  key={follow.id}
+                  user={{
+                    email: ' ',
+                    nickName: follow.login,
+                    photoURL: follow.avatar_url,
+                    uid: follow.id,
+                  }}
+                  isSelected={isActive === follow.id}
+                  onClick={() => handleContactClick(follow.id)}
+                />
+              );
+            })}
       </div>
     </div>
   );

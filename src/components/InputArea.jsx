@@ -41,7 +41,7 @@ const InputArea = () => {
                   id: uuid(),
                   text,
                   imageURL: downloadURL,
-                  senderId: currentUser.uid,
+                  senderId: currentUser?.providerData[0]?.uid,
                   date: Timestamp.now(),
                 }),
               });
@@ -56,13 +56,13 @@ const InputArea = () => {
         messages: arrayUnion({
           id: uuid(),
           text,
-          senderId: currentUser.uid,
+          senderId: currentUser?.providerData[0]?.uid,
           date: Timestamp.now(),
         }),
       });
     }
 
-    await updateDoc(doc(db, 'userChats', currentUser.uid), {
+    await updateDoc(doc(db, 'userChats', currentUser?.providerData[0]?.uid), {
       [data.combinedId + '.lastMessage']: {
         text,
       },
