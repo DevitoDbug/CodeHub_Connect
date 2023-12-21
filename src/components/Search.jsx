@@ -9,8 +9,6 @@ import { useFetchFollowers, useFetchFollowing } from '../api/hooks';
 
 const Search = () => {
   const { currentUser } = useContext(LoginContext);
-  const { accessToken } = useContext(LoginContext);
-
   const [, setSearchOpen] = useContext(SearchContext);
   const [isActive, setIsActive] = useState(null);
   const [followers, setFollowers] = useState([]);

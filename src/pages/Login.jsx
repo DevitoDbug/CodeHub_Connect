@@ -22,20 +22,30 @@ const Login = () => {
 
     //Add user to the users collection
     try {
-      await setDoc(doc(db, 'users', result.user.uid), {
-        uid: result.user.reloadUserInfo.providerUserInfo[0].rawId,
-        displayName: result.user.displayName,
-        nickName: result.user.reloadUserInfo.providerUserInfo[0].screenName,
-        email: result.user.email,
-        photoURL: result.user.photoURL,
-      });
+      await setDoc(
+        doc(db, 'users', result.user.reloadUserInfo.providerUserInfo[0].rawId),
+        {
+          uid: result.user.reloadUserInfo.providerUserInfo[0].rawId,
+          displayName: result.user.displayName,
+          nickName: result.user.reloadUserInfo.providerUserInfo[0].screenName,
+          email: result.user.email,
+          photoURL: result.user.photoURL,
+        },
+      );
     } catch (error) {
       console.log(error);
     }
 
     //Add the user to the userChats collection
     try {
-      await setDoc(doc(db, 'userChats', result.user.uid), {});
+      await setDoc(
+        doc(
+          db,
+          'userChats',
+          result.user.reloadUserInfo.providerUserInfo[0].rawId,
+        ),
+        {},
+      );
 
       // Navigate to the home page after creating the userChat document
     } catch (e) {

@@ -66,6 +66,7 @@ const Contact = ({
       }
 
       try {
+        //We update the userChats for the receiver of the text
         await updateDoc(doc(db, 'userChats', user.uid), {
           [combinedId + '.userInfo']: {
             uid: currentUserUid,
