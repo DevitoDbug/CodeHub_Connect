@@ -56,7 +56,7 @@ const Contact = ({
         await updateDoc(doc(db, 'userChats', currentUserUid), {
           [combinedId + '.userInfo']: {
             uid: user.uid,
-            firstName: user.displayName,
+            nickName: user.nickName,
             photoURL: user.photoURL,
           },
           [combinedId + '.date']: serverTimestamp(),
