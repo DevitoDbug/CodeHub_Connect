@@ -25,6 +25,9 @@ const Contact = ({
 }) => {
   const [, setSearchPanelOpen] = useContext(SearchContext);
   const { currentUser } = useContext(LoginContext);
+  const currentUserDisplayName = currentUser?.reloadUserInfo?.screenName;
+  const currentUserUid = currentUser.providerData[0].uid;
+
   const { dispatch } = useContext(ChatContext);
   const { scrollToMessageSection } = useContext(NavContext);
 
@@ -33,9 +36,9 @@ const Contact = ({
     : 'border-b-2 border-C_BorderLightBlue';
 
   const combinedId =
-    currentUser.uid > user.uid
-      ? currentUser.uid + user.uid
-      : user.uid + currentUser.uid;
+    currentUserUid > user.uid
+      ? currentUserUid + user.uid
+      : user.uid + currentUserUid;
 
   const handleSelect = async () => {
     setSearchPanelOpen(false);
@@ -47,7 +50,7 @@ const Contact = ({
     let currentUserDetails;
     const q = query(
       collection(db, 'users'),
-      where('firstName', '==', currentUser.displayName),
+      where('nickName', '==', currentUserDisplayName),
     );
 
     try {
@@ -64,7 +67,7 @@ const Contact = ({
     //Also check if user is trying to make a chat to himself
     const docRef = doc(db, 'chats', combinedId);
     const docSnap = await getDoc(docRef);
-    if (!docSnap.exists() && user.uid != currentUser.uid) {
+    if (!docSnap.exists() && user.uid != currentUserUid) {
       //create that chat
       await setDoc(doc(db, 'chats', combinedId), { message: [] });
       //Adding user to userChats for both communicators
@@ -122,7 +125,7 @@ const Contact = ({
               isSelected ? 'text-C_TextWhite' : 'text-C_TextBlack'
             }`}
           >
-            {user.displayName}
+            {user.nickName}
           </span>
           <span
             className={`text-[0.625rem] font-light  ${
