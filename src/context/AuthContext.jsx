@@ -6,6 +6,8 @@ export const LoginContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
+  const [currentUserBulk, setCurrentUserBulk] = useState(null);
+
   const [accessToken, setAccessToken] = useState(null);
 
   //.providerData[0] has the following
@@ -20,6 +22,7 @@ export const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user?.providerData[0]);
+      setCurrentUserBulk(user);
     });
     return () => {
       unsub();
@@ -27,7 +30,9 @@ export const AuthContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <LoginContext.Provider value={{ currentUser, accessToken, setAccessToken }}>
+    <LoginContext.Provider
+      value={{ currentUser, accessToken, setAccessToken, currentUserBulk }}
+    >
       {children}
     </LoginContext.Provider>
   );

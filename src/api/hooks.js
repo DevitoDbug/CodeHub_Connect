@@ -16,7 +16,7 @@ export const useFetchFollowing = (user) => {
 
 export const useFetchUser = (user) => {
   return useQuery({
-    queryKey: ['user'],
+    queryKey: [user],
     queryFn: () => fetchUser(user),
   });
 };

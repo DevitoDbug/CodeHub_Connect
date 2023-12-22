@@ -4,16 +4,21 @@ import { useFetchUser } from '../api/hooks';
 import { addUser, doesUserExist } from '../firebase/users';
 import { createUserChats } from '../firebase/userChats';
 import { createChat, doesChatExist } from '../firebase/chat';
+import { NavContext } from '../pages/Home';
+import { SearchContext } from '../context/SearchContext';
 
 const Contact = ({
-  userID,
+  userInfo,
   isSelected,
   lastMessage,
   lastMessageDate,
   onClick,
 }) => {
   const { currentUser } = useContext(LoginContext);
-  const { user, setUser } = useState(null);
+  const { scrollToMessageSection } = useContext(NavContext);
+  const [, setSearchOpen] = useContext(SearchContext);
+
+  const [user, setUser] = useState(null);
 
   const darkBg = isSelected
     ? 'rounded-xl bg-C_DarkBlue shadow-lg shadow-C_DarkBlueShadow'
@@ -24,7 +29,7 @@ const Contact = ({
     data: userData,
     status: userStatus,
     error: userError,
-  } = useFetchUser(userID);
+  } = useFetchUser(userInfo.login);
 
   //Update user's data
   useEffect(() => {
@@ -34,21 +39,15 @@ const Contact = ({
     if (userStatus === 'error') {
       console.log(userError);
     }
-  }, [userStatus, userData, userError, setUser]);
+  }, [userStatus, userData, userError]);
 
   const combinedId =
-    currentUser.uid > user.id
-      ? currentUser.uid + user.id
-      : user.id + currentUser.uid;
+    currentUser?.uid > user?.id
+      ? currentUser?.uid + user?.id
+      : user?.id + currentUser?.uid;
 
   const handleContactSelected = async () => {
-    //Check to see if the user exits in the users collection
-    //If not, add them to the users collection
-    //Check to see if there is chat between our two users in the chats collection
-    //If not, add a chat to the chats collection
-    //If there is then update the chat's last message and last message date
-    //Then, navigate to the chat page
-
+    //Check to see if user is in the users collection
     const userExitst = await doesUserExist(user.id);
     if (!userExitst) {
       //Add user to the users collection
@@ -75,6 +74,8 @@ const Contact = ({
     }
 
     //Navigate to the chat page
+    scrollToMessageSection(true);
+    setSearchOpen(false);
   };
 
   return (
@@ -88,7 +89,7 @@ const Contact = ({
     >
       <div className="flex flex-row gap-2">
         <img
-          src={user.photoURL}
+          src={user?.avatar_url}
           alt=""
           className={`rounded-full border-2 border-C_Gold object-cover ${
             isSelected ? 'h-14 w-14 ' : 'h-12 w-12 '
@@ -100,7 +101,7 @@ const Contact = ({
               isSelected ? 'text-C_TextWhite' : 'text-C_TextBlack'
             }`}
           >
-            {user.nickName}
+            {user?.login}
           </span>
           <span
             className={`text-[0.625rem] font-light  ${
