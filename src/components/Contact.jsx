@@ -23,8 +23,8 @@ const Contact = ({
   const { currentUser } = useContext(LoginContext);
   const currentUserNickName = currentUser?.reloadUserInfo?.screenName;
   const currentUserUid = currentUser.providerData[0].uid;
-  const currentUserDisplayName = currentUser?.reloadUserInfo?.displayName;
-  const currentUserPhotoURL = currentUser?.reloadUserInfo?.photoURL;
+  // const currentUserDisplayName = currentUser?.reloadUserInfo?.displayName;
+  const currentUserPhotoURL = currentUser?.providerData[0].photoURL;
 
   const { dispatch } = useContext(ChatContext);
   const { scrollToMessageSection } = useContext(NavContext);
@@ -65,17 +65,56 @@ const Contact = ({
         console.log(error);
       }
 
+      console.log(
+        'CurrentUser:',
+        currentUserUid,
+        currentUserNickName,
+        currentUserPhotoURL,
+      );
+
       try {
         //We update the userChats for the receiver of the text
-        await updateDoc(doc(db, 'userChats', user.uid), {
-          [combinedId + '.userInfo']: {
-            uid: currentUserUid,
-            nickName: currentUserNickName,
-            displayName: currentUserDisplayName,
-            photoURL: currentUserPhotoURL,
-          },
-          [combinedId + '.date']: serverTimestamp(),
-        });
+        const docRef = doc(db, 'users', String(user.uid));
+        const docSnap = await getDoc(docRef);
+
+        if (!docSnap.exists()) {
+          //User does not exitst
+          //Add user to the users collection
+          try {
+            await setDoc(doc(db, 'users', String(user.uid)), {
+              uid: user.uid,
+              displayName: ``,
+              nickName: user.nickName,
+              email: ``,
+              photoURL: user.photoURL,
+            });
+          } catch (error) {
+            console.log(error);
+          }
+
+          //Add the user to the userChats collection
+          try {
+            await setDoc(doc(db, 'userChats', String(user.uid)), {
+              [combinedId + '.userInfo']: {
+                uid: currentUserUid,
+                nickName: currentUserNickName,
+                photoURL: currentUserPhotoURL,
+              },
+              [combinedId + '.date']: serverTimestamp(),
+            });
+          } catch (e) {
+            console.log('Adding user chat to firestore error:\n', e);
+          }
+        } else {
+          await updateDoc(doc(db, 'userChats', String(user.uid)), {
+            [combinedId + '.userInfo']: {
+              uid: currentUserUid,
+              nickName: currentUserNickName,
+              photoURL: currentUserPhotoURL,
+            },
+            [combinedId + '.date']: serverTimestamp(),
+          });
+        }
       } catch (error) {
         console.log(error);
       }

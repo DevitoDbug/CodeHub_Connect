@@ -6,6 +6,8 @@ import { SearchContext } from '../context/SearchContext';
 import Contact from './Contact';
 import { LoginContext } from '../context/AuthContext';
 import { useFetchFollowers, useFetchFollowing } from '../api/hooks';
+import { doc, getDoc, setDoc } from '@firebase/firestore';
+import { db } from '../firebase';
 
 const Search = () => {
   const { currentUser } = useContext(LoginContext);
@@ -53,13 +55,13 @@ const Search = () => {
     setSearchOpen(false);
   };
 
-  const handleContactClick = (id) => {
+  const handleContactClick = (id, nickName, photoURL) => {
     setIsActive(id);
   };
 
-  useEffect(() => {
-    console.log(currentUser.providerData[0]);
-  }, [currentUser]);
+  // useEffect(() => {
+  //   console.log(currentUser.providerData[0]);
+  // }, [currentUser]);
   return (
     <div className="absolute left-[10%] top-[10%] flex h-[40%] w-[80%] flex-col items-center rounded-lg bg-[#bae9f8] px-1 py-2 shadow-lg md:left-[30%] md:w-[50%] lg:left-[30%] lg:top-[20%] lg:h-[50%] lg:w-[40%]">
       <div className="flex w-full items-start justify-between ">
@@ -98,7 +100,13 @@ const Search = () => {
                     uid: follower.id,
                   }}
                   isSelected={isActive === follower.id}
-                  onClick={() => handleContactClick(follower.id)}
+                  onClick={() => {
+                    handleContactClick(
+                      follower.id,
+                      follower.login,
+                      follower.avatar_url,
+                    );
+                  }}
                 />
               );
             })
@@ -113,7 +121,13 @@ const Search = () => {
                     uid: follow.id,
                   }}
                   isSelected={isActive === follow.id}
-                  onClick={() => handleContactClick(follow.id)}
+                  onClick={() =>
+                    handleContactClick(
+                      follow.id,
+                      follow.login,
+                      follow.avatar_url,
+                    )
+                  }
                 />
               );
             })}
