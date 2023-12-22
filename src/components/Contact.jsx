@@ -1,141 +1,95 @@
-import React, { useContext } from 'react';
-import { SearchContext } from '../context/SearchContext';
-import {
-  doc,
-  getDoc,
-  serverTimestamp,
-  setDoc,
-  updateDoc,
-} from 'firebase/firestore';
-import { db } from '../firebase';
+import { useContext, useEffect, useState } from 'react';
 import { LoginContext } from '../context/AuthContext';
-import { ChatContext } from '../context/ChatContext';
+import { useFetchUser } from '../api/hooks';
+import { addUser, doesUserExist } from '../firebase/users';
+import { createUserChats } from '../firebase/userChats';
+import { createChat, doesChatExist } from '../firebase/chat';
 import { NavContext } from '../pages/Home';
+import { SearchContext } from '../context/SearchContext';
 
 const Contact = ({
-  user,
+  userInfo,
   isSelected,
   lastMessage,
   lastMessageDate,
   onClick,
 }) => {
-  const [, setSearchPanelOpen] = useContext(SearchContext);
   const { currentUser } = useContext(LoginContext);
-  const currentUserNickName = currentUser?.reloadUserInfo?.screenName;
-  const currentUserUid = currentUser.providerData[0].uid;
-  // const currentUserDisplayName = currentUser?.reloadUserInfo?.displayName;
-  const currentUserPhotoURL = currentUser?.providerData[0].photoURL;
-
-  const { dispatch } = useContext(ChatContext);
   const { scrollToMessageSection } = useContext(NavContext);
+  const [, setSearchOpen] = useContext(SearchContext);
+
+  const [user, setUser] = useState(null);
 
   const darkBg = isSelected
     ? 'rounded-xl bg-C_DarkBlue shadow-lg shadow-C_DarkBlueShadow'
     : 'border-b-2 border-C_BorderLightBlue';
 
+  //fetched user data
+  const {
+    data: userData,
+    status: userStatus,
+    error: userError,
+  } = useFetchUser(userInfo.login);
+
+  //Update user's data
+  useEffect(() => {
+    if (userStatus === 'success') {
+      setUser(userData);
+    }
+    if (userStatus === 'error') {
+      console.log(userError);
+    }
+  }, [userStatus, userData, userError]);
+
   const combinedId =
-    currentUserUid > user.uid
-      ? currentUserUid + user.uid
-      : user.uid + currentUserUid;
+    currentUser?.uid > user?.id
+      ? currentUser?.uid + user?.id
+      : user?.id + currentUser?.uid;
 
-  const handleSelect = async () => {
-    setSearchPanelOpen(false);
-
-    //setting chat context
-    dispatch({ type: 'CHANGE_CHAT_RECIPIENT', payload: user });
-
-    //Checking if there exist a chat between user and selected contact
-    //Also check if user is trying to make a chat to himself
-    const docRef = doc(db, 'chats', combinedId);
-    const docSnap = await getDoc(docRef);
-    if (!docSnap.exists() && user.uid != currentUserUid) {
-      //create that chat
-      await setDoc(doc(db, 'chats', combinedId), { message: [] });
-      //Adding user to userChats for both communicators
-      try {
-        await updateDoc(doc(db, 'userChats', currentUserUid), {
-          [combinedId + '.userInfo']: {
-            uid: user.uid,
-            nickName: user.nickName,
-            photoURL: user.photoURL,
-          },
-          [combinedId + '.date']: serverTimestamp(),
-        });
-      } catch (error) {
-        console.log(error);
-      }
-
-      console.log(
-        'CurrentUser:',
-        currentUserUid,
-        currentUserNickName,
-        currentUserPhotoURL,
+  const handleContactSelected = async () => {
+    //Check to see if user is in the users collection
+    const userExitst = await doesUserExist(user.id);
+    if (!userExitst) {
+      //Add user to the users collection
+      //addUser (uid, displayName, nickName, email, photoURL)
+      await addUser(
+        user.id,
+        user.name,
+        user.login,
+        user.email,
+        user.avatar_url,
       );
 
-      try {
-        //We update the userChats for the receiver of the text
-        const docRef = doc(db, 'users', String(user.uid));
-        const docSnap = await getDoc(docRef);
-
-        if (!docSnap.exists()) {
-          //User does not exitst
-          //Add user to the users collection
-          try {
-            await setDoc(doc(db, 'users', String(user.uid)), {
-              uid: user.uid,
-              displayName: ``,
-              nickName: user.nickName,
-              email: ``,
-              photoURL: user.photoURL,
-            });
-          } catch (error) {
-            console.log(error);
-          }
-
-          //Add the user to the userChats collection
-          try {
-            await setDoc(doc(db, 'userChats', String(user.uid)), {
-              [combinedId + '.userInfo']: {
-                uid: currentUserUid,
-                nickName: currentUserNickName,
-                photoURL: currentUserPhotoURL,
-              },
-              [combinedId + '.date']: serverTimestamp(),
-            });
-          } catch (e) {
-            console.log('Adding user chat to firestore error:\n', e);
-          }
-        } else {
-          await updateDoc(doc(db, 'userChats', String(user.uid)), {
-            [combinedId + '.userInfo']: {
-              uid: currentUserUid,
-              nickName: currentUserNickName,
-              photoURL: currentUserPhotoURL,
-            },
-            [combinedId + '.date']: serverTimestamp(),
-          });
-        }
-      } catch (error) {
-        console.log(error);
-      }
+      //Add user to the userChats collection
+      //createUserChats(id)
+      await createUserChats(user.id);
     }
 
-    //Navigaiton to messages
-    scrollToMessageSection();
+    //Check to see if there is chat between our two users in the chats collection
+    const chatExists = await doesChatExist(combinedId);
+    if (!chatExists) {
+      //Add chat to the chats collection
+      //createChat(id)
+      await createChat(combinedId);
+    }
+
+    //Navigate to the chat page
+    scrollToMessageSection(true);
+    setSearchOpen(false);
   };
 
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <div
       onClick={() => {
-        handleSelect();
+        handleContactSelected();
         onClick();
       }}
       className={`flex h-20 w-full flex-row items-center justify-between p-2 ${darkBg} `}
     >
       <div className="flex flex-row gap-2">
         <img
-          src={user.photoURL}
+          src={user?.avatar_url}
           alt=""
           className={`rounded-full border-2 border-C_Gold object-cover ${
             isSelected ? 'h-14 w-14 ' : 'h-12 w-12 '
@@ -147,7 +101,7 @@ const Contact = ({
               isSelected ? 'text-C_TextWhite' : 'text-C_TextBlack'
             }`}
           >
-            {user.nickName}
+            {user?.login}
           </span>
           <span
             className={`text-[0.625rem] font-light  ${

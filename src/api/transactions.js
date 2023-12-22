@@ -17,3 +17,13 @@ export const fetchFollowing = async (username) => {
     console.log(e.message);
   }
 };
+
+export const fetchUser = async (username) => {
+  console.log(username);
+  try {
+    const { data } = await httpClient.get(`/${username}`);
+    return data;
+  } catch (e) {
+    console.log(e.message);
+  }
+};
