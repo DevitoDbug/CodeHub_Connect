@@ -6,8 +6,6 @@ import { SearchContext } from '../context/SearchContext';
 import Contact from './Contact';
 import { LoginContext } from '../context/AuthContext';
 import { useFetchFollowers, useFetchFollowing } from '../api/hooks';
-import { doc, getDoc, setDoc } from '@firebase/firestore';
-import { db } from '../firebase';
 
 const Search = () => {
   const { currentUser } = useContext(LoginContext);
@@ -93,12 +91,7 @@ const Search = () => {
               return (
                 <Contact
                   key={follower.id}
-                  user={{
-                    email: ' ',
-                    nickName: follower.login,
-                    photoURL: follower.avatar_url,
-                    uid: follower.id,
-                  }}
+                  userID={follower.id}
                   isSelected={isActive === follower.id}
                   onClick={() => {
                     handleContactClick(
@@ -114,12 +107,7 @@ const Search = () => {
               return (
                 <Contact
                   key={follow.id}
-                  user={{
-                    email: ' ',
-                    nickName: follow.login,
-                    photoURL: follow.avatar_url,
-                    uid: follow.id,
-                  }}
+                  userID={follow.id}
                   isSelected={isActive === follow.id}
                   onClick={() =>
                     handleContactClick(

@@ -8,10 +8,18 @@ export const AuthContextProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [accessToken, setAccessToken] = useState(null);
 
+  //.providerData[0] has the following
+  // displayName: null;
+  // email: 'davidochiengy@gmail.com';
+  // phoneNumber: null;
+  // photoURL: 'https://avatars.githubusercontent.com/u/105533289?v=4';
+  // providerId: 'github.com';
+  // uid: '105533289';
+
   //checking for changes in current user
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
-      setCurrentUser(user);
+      setCurrentUser(user?.providerData[0]);
     });
     return () => {
       unsub();
