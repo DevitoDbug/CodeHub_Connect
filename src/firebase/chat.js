@@ -27,31 +27,24 @@ export const doesChatExist = async (id) => {
 };
 
 //Upload text message to the chat collection in firebase
-export const uploadMessage = async (img, combinedId, currentUserId, text) => {
-  const storageRef = ref(storage, uuid());
-  const uploadTask = uploadBytesResumable(storageRef, img);
-
-  uploadTask.on(
-    (error) => {
-      console.log('There  was a failure on the upload\n ERROR: ', error);
-    },
-    () => {
-      getDownloadURL(uploadTask.snapshot.ref).then(async () => {
-        await updateDoc(doc(db, 'chats', combinedId), {
-          messages: arrayUnion({
-            id: uuid(),
-            text,
-            senderId: currentUserId,
-            date: Timestamp.now(),
-          }),
-        });
-      });
-    },
-  );
+export const uploadText = async (combinedId, currentUserId, text) => {
+  await updateDoc(doc(db, 'chats', combinedId), {
+    messages: arrayUnion({
+      id: uuid(),
+      text,
+      senderId: currentUserId,
+      date: Timestamp.now(),
+    }),
+  });
 };
 
 //Upload text and image message to the chat collection in firebase
-export const uploadImage = async (img, combinedId, currentUserId, text) => {
+export const uploadImageAndText = async (
+  img,
+  combinedId,
+  currentUserId,
+  text,
+) => {
   const storageRef = ref(storage, uuid());
   const uploadTask = uploadBytesResumable(storageRef, img);
 

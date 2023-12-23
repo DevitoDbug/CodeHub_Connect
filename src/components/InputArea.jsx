@@ -5,13 +5,10 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useContext, useState } from 'react';
-import { doc, updateDoc, arrayUnion, Timestamp } from 'firebase/firestore';
-import { db, storage } from '../firebase';
 import { ChatContext } from '../context/ChatContext';
-import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import { v4 as uuid } from 'uuid';
 import { LoginContext } from '../context/AuthContext';
 import { updateLastMessageAndDate } from '../firebase/userChats';
+import { uploadImageAndText, uploadText } from '../firebase/chat';
 
 const InputArea = () => {
   const { data } = useContext(ChatContext);
@@ -22,44 +19,16 @@ const InputArea = () => {
 
   const handleSend = async () => {
     if (img) {
-      const storageRef = ref(storage, uuid());
-      const uploadTask = uploadBytesResumable(storageRef, img);
-      uploadTask.on(
-        (error) => {
-          console.log('There  was a failure on the upload\n ERROR: ', error);
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-            try {
-              await updateDoc(doc(db, 'chats', data.combinedId), {
-                messages: arrayUnion({
-                  id: uuid(),
-                  text,
-                  imageURL: downloadURL,
-                  senderId: currentUser?.providerData[0]?.uid,
-                  date: Timestamp.now(),
-                }),
-              });
-            } catch (e) {
-              console.log(e);
-            }
-          });
-        },
-      );
+      //update the chat collection with the image and text
+      //uploadImageAndText(img,combinedId,currentUserId,text)
+      uploadImageAndText(img, data.combinedId, currentUser.uid, text);
     } else {
-      await updateDoc(doc(db, 'chats', data.combinedId), {
-        messages: arrayUnion({
-          id: uuid(),
-          text,
-          senderId: currentUser?.providerData[0]?.uid,
-          date: Timestamp.now(),
-        }),
-      });
+      //update the chat collection with the text
+      //uploadText(combinedId,currentUserId,text)
+      uploadText(data.combinedId, currentUser.uid, text);
     }
 
     //Update the last message and date in the userChats collection for both users
-    //updateDoc(doc(db, 'userChats', uid)-  for user 1
-
     //updateLastMessageAndDate(userID, combinedID, lastMessage) - for user 1
     await updateLastMessageAndDate(currentUser.uid, data.combinedId, text);
 
