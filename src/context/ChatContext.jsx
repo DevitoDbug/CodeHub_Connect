@@ -11,6 +11,8 @@ const ChatContextProider = ({ children }) => {
     switch (action.type) {
       case 'CHANGE_CHAT_RECIPIENT':
         return {
+          //setting user to the userInfo field
+          //setting the combinedId
           userInfo: action.payload,
           combinedId:
             currentUserUid > action.payload.uid

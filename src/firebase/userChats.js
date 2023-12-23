@@ -1,5 +1,4 @@
 //CRUD for the list of chats for a given user in firebase
-
 import {
   doc,
   getDoc,
@@ -39,6 +38,18 @@ export const updateUserChats = async (
       otherUserEmail,
       otherUserPhotoURL,
     },
+    [combinedID + '.date']: serverTimestamp(),
+  });
+};
+
+//UpdateLastMessage in userChats in firebase
+export const updateLastMessageAndDate = async (
+  userID,
+  combinedID,
+  lastMessage,
+) => {
+  await updateDoc(doc(db, 'userChats', String(userID)), {
+    [combinedID + '.lastMessage']: { lastMessage },
     [combinedID + '.date']: serverTimestamp(),
   });
 };

@@ -5,18 +5,13 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useContext, useState } from 'react';
-import {
-  doc,
-  updateDoc,
-  arrayUnion,
-  Timestamp,
-  serverTimestamp,
-} from 'firebase/firestore';
+import { doc, updateDoc, arrayUnion, Timestamp } from 'firebase/firestore';
 import { db, storage } from '../firebase';
 import { ChatContext } from '../context/ChatContext';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { v4 as uuid } from 'uuid';
 import { LoginContext } from '../context/AuthContext';
+import { updateLastMessageAndDate } from '../firebase/userChats';
 
 const InputArea = () => {
   const { data } = useContext(ChatContext);
@@ -62,19 +57,15 @@ const InputArea = () => {
       });
     }
 
-    await updateDoc(doc(db, 'userChats', currentUser?.providerData[0]?.uid), {
-      [data.combinedId + '.lastMessage']: {
-        text,
-      },
-      [data.combinedId + '.date']: serverTimestamp(),
-    });
-    await updateDoc(doc(db, 'userChats', data.userInfo.uid), {
-      [data.combinedId + '.lastMessage']: {
-        text,
-      },
-      [data.combinedId + '.date']: serverTimestamp(),
-    });
+    //Update the last message and date in the userChats collection for both users
+    //updateDoc(doc(db, 'userChats', uid)-  for user 1
 
+    //updateLastMessageAndDate(userID, combinedID, lastMessage) - for user 1
+    await updateLastMessageAndDate(currentUser.uid, data.combinedId, text);
+
+    //updateLastMessageAndDate(userID, combinedID, lastMessage) - for user 2
+    // Fields in the data.userInfo object are : .id , .name, .login, .email, .avatar_url
+    await updateLastMessageAndDate(data.userInfo.id, data.combinedId, text);
     setText('');
     setImage(null);
   };

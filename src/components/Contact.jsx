@@ -6,6 +6,7 @@ import { createUserChats } from '../firebase/userChats';
 import { createChat, doesChatExist } from '../firebase/chat';
 import { NavContext } from '../pages/Home';
 import { SearchContext } from '../context/SearchContext';
+import { ChatContext } from '../context/ChatContext';
 
 const Contact = ({
   userInfo,
@@ -17,6 +18,7 @@ const Contact = ({
   const { currentUser } = useContext(LoginContext);
   const { scrollToMessageSection } = useContext(NavContext);
   const [, setSearchOpen] = useContext(SearchContext);
+  const { dispatch } = useContext(ChatContext);
 
   const [user, setUser] = useState(null);
 
@@ -47,6 +49,9 @@ const Contact = ({
       : user?.id + currentUser?.uid;
 
   const handleContactSelected = async () => {
+    //Set the user in the chat context
+    dispatch({ type: 'CHANGE_CHAT_RECIPIENT', payload: user });
+
     //Check to see if user is in the users collection
     const userExitst = await doesUserExist(user.id);
     if (!userExitst) {
