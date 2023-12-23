@@ -1,56 +1,55 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { auth, db } from '../firebase';
-import { GithubAuthProvider, signInWithPopup } from 'firebase/auth';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import { useNavigate } from 'react-router-dom';
-import { doc, setDoc } from 'firebase/firestore';
-import { useContext } from 'react';
-import { LoginContext } from '../context/AuthContext';
+import { signInWithGithub } from '../firebase/login';
+import { addUser, doesUserExist, updateUser } from '../firebase/users';
+import { createUserChats } from '../firebase/userChats';
 const Login = () => {
   //navigate to home
   const navigate = useNavigate();
 
-  const { setAccessToken } = useContext(LoginContext);
-
   const handleSignIn = async () => {
-    const provider = new GithubAuthProvider();
-    const result = await signInWithPopup(auth, provider);
-
-    const credential = GithubAuthProvider.credentialFromResult(result);
-    const token = credential.accessToken;
-    setAccessToken(token);
+    //Sign in with github
+    const loggedInUser = await signInWithGithub();
+    const loggedInUserUid =
+      loggedInUser?.reloadUserInfo?.providerUserInfo[0]?.rawId;
+    const loggedInUserDisplayName = loggedInUser?.displayName;
+    const loggedInUserNickName =
+      loggedInUser?.reloadUserInfo?.providerUserInfo[0]?.screenName;
+    const loggedInUserEmail = loggedInUser?.email;
+    const loggedInUserPhotoURL = loggedInUser?.photoURL;
 
     //Add user to the users collection
-    try {
-      await setDoc(
-        doc(db, 'users', result.user.reloadUserInfo.providerUserInfo[0].rawId),
-        {
-          uid: result.user.reloadUserInfo.providerUserInfo[0].rawId,
-          displayName: result.user.displayName,
-          nickName: result.user.reloadUserInfo.providerUserInfo[0].screenName,
-          email: result.user.email,
-          photoURL: result.user.photoURL,
-        },
+    const doesUserExistInDb = await doesUserExist(loggedInUserUid);
+    console.log('Does user exist: ', doesUserExistInDb);
+    if (doesUserExistInDb) {
+      //Update the info of the user
+      //updateUser(uid, displayName,nickName,email,photoURL)
+      updateUser(
+        loggedInUserUid,
+        loggedInUserDisplayName,
+        loggedInUserNickName,
+        loggedInUserEmail,
+        loggedInUserPhotoURL,
       );
-    } catch (error) {
-      console.log(error);
-    }
-
-    //Add the user to the userChats collection
-    try {
-      await setDoc(
-        doc(
-          db,
-          'userChats',
-          result.user.reloadUserInfo.providerUserInfo[0].rawId,
-        ),
-        {},
+      navigate('/');
+      return;
+    } else {
+      //Add the user to the users collection/Create a new user
+      //addUser(uid, displayName, nickName, email, photoURL)
+      await addUser(
+        loggedInUserUid,
+        loggedInUserDisplayName,
+        loggedInUserNickName,
+        loggedInUserEmail,
+        loggedInUserPhotoURL,
       );
 
-      // Navigate to the home page after creating the userChat document
-    } catch (e) {
-      console.log('Adding user chat to firestore error:\n', e);
+      //Add the user to the userChats collection
+      //createUserChats(uid)
+      await createUserChats(loggedInUserUid);
     }
+    //Navigate to home
     navigate('/');
   };
 
