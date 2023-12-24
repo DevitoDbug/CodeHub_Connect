@@ -12,9 +12,7 @@ import { CurrentPageContext } from '../context/CurrentPageContex';
 import { NavContext } from '../pages/Home';
 
 const OptionsNavBar = () => {
-  const { currentPage, setCurrentPage } = useContext(
-    CurrentPageContext,
-  );
+  const { currentPage, setCurrentPage } = useContext(CurrentPageContext);
   const { scrollToMessageSection } = useContext(NavContext);
   const [, setSearchOpen] = useContext(SearchContext);
   const handleOpenSearch = () => {
@@ -33,9 +31,7 @@ const OptionsNavBar = () => {
         </button>
         <div
           className={`h-1 w-[75%] rounded-xl  ${
-            currentPage == 'starPage'
-              ? 'bg-C_DarkBlue'
-              : 'bg-transparent'
+            currentPage == 'starPage' ? 'bg-C_DarkBlue' : 'bg-transparent'
           }`}
         ></div>
       </div>
@@ -49,9 +45,7 @@ const OptionsNavBar = () => {
         </button>
         <div
           className={`h-1 w-[75%] rounded-xl  ${
-            currentPage == 'groupPage'
-              ? 'bg-C_DarkBlue'
-              : 'bg-transparent'
+            currentPage == 'groupPage' ? 'bg-C_DarkBlue' : 'bg-transparent'
           }`}
         ></div>
       </div>
@@ -65,15 +59,18 @@ const OptionsNavBar = () => {
         </button>
         <div
           className={`h-1 w-[75%] rounded-xl  ${
-            currentPage == 'searchPage'
-              ? 'bg-C_DarkBlue'
-              : 'bg-transparent'
+            currentPage == 'searchPage' ? 'bg-C_DarkBlue' : 'bg-transparent'
           }`}
         ></div>
       </div>
 
       <div className="ml-2 flex flex-col items-center justify-center">
-        <button onClick={scrollToMessageSection}>
+        <button
+          onClick={() => {
+            setSearchOpen(false);
+            scrollToMessageSection();
+          }}
+        >
           <FontAwesomeIcon
             icon={faMessage}
             className=" text-xl text-C_UserDullBlack"
@@ -81,9 +78,7 @@ const OptionsNavBar = () => {
         </button>
         <div
           className={`h-1 w-[75%] rounded-xl  ${
-            currentPage == 'contactPage'
-              ? 'bg-C_DarkBlue'
-              : 'bg-transparent'
+            currentPage == 'contactPage' ? 'bg-C_DarkBlue' : 'bg-transparent'
           }`}
         ></div>
       </div>
