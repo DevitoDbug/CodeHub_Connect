@@ -30,6 +30,11 @@ const ContactChats = () => {
     currentUser?.uid && getChats();
   }, [currentUser?.uid]);
 
+  // //log out chats using useEffect
+  // useEffect(() => {
+  //   console.log(chats);
+  // }, [chats]);
+
   return (
     <aside className=" h-full w-full">
       <div className=" h-[12%] md:mt-2 md:h-[9%] lg:h-[15%]">
@@ -40,7 +45,7 @@ const ContactChats = () => {
           {chats &&
             Object.entries(chats)
               ?.sort((a, b) => b[1].date - a[1].date)
-              .map((user) => (
+              .map((user) => {
                 <Contact
                   key={user[0]}
                   user={user[1].userInfo}
@@ -48,8 +53,8 @@ const ContactChats = () => {
                   lastMessageDate={user[1].date}
                   isSelected={isActive === user[0]}
                   onClick={() => handleContactClick(user[0])}
-                />
-              ))}
+                />;
+              })}
         </div>
         <div>
           <OptionsNavBar />

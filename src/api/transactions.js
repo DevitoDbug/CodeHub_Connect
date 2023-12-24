@@ -19,7 +19,7 @@ export const fetchFollowing = async (username) => {
 };
 
 export const fetchUser = async (username) => {
-  console.log(username);
+  if (!username) return;
   try {
     const { data } = await httpClient.get(`/${username}`);
     return data;

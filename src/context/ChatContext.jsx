@@ -7,7 +7,7 @@ const ChatContextProider = ({ children }) => {
   const { currentUser } = useContext(LoginContext);
 
   const reducer = (state, action) => {
-    const currentUserUid = currentUser.providerData[0].uid;
+    const currentUserUid = currentUser.uid;
     switch (action.type) {
       case 'CHANGE_CHAT_RECIPIENT':
         return {
@@ -15,9 +15,9 @@ const ChatContextProider = ({ children }) => {
           //setting the combinedId
           userInfo: action.payload,
           combinedId:
-            currentUserUid > action.payload.uid
-              ? currentUserUid + action.payload.uid
-              : action.payload.uid + currentUserUid,
+            currentUserUid > action.payload.id
+              ? currentUserUid + action.payload.id
+              : action.payload.id + currentUserUid,
         };
       default:
         throw new Error('That action type is not defined');
