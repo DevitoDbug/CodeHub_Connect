@@ -8,13 +8,7 @@ import { NavContext } from '../pages/Home';
 import { SearchContext } from '../context/SearchContext';
 import { ChatContext } from '../context/ChatContext';
 
-const Contact = ({
-  userInfo,
-  isSelected,
-  lastMessage,
-  lastMessageDate,
-  onClick,
-}) => {
+const Contact = ({ userInfo, isSelected, onClick }) => {
   const { currentUser } = useContext(LoginContext);
   const { scrollToMessageSection } = useContext(NavContext);
   const [, setSearchOpen] = useContext(SearchContext);
@@ -109,22 +103,7 @@ const Contact = ({
           >
             {user?.login}
           </span>
-          <span
-            className={`text-[0.625rem] font-light  ${
-              isSelected ? 'text-C_TextWhiteDull' : 'text-C_TextBlack'
-            }`}
-          >
-            {lastMessage?.text}
-          </span>
         </div>
-      </div>
-      <div
-        className={`text-[0.625rem] font-normal ${
-          isSelected ? 'text-C_TextWhite' : 'text-C_TextBlack'
-        }`}
-      >
-        {lastMessageDate &&
-          lastMessageDate.toDate().toLocaleDateString('en-US')}
       </div>
     </div>
   );

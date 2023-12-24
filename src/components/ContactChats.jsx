@@ -46,6 +46,7 @@ const ContactChats = () => {
             Object.entries(chats)
               ?.sort((a, b) => b[1].date - a[1].date)
               .map((user) => {
+                console.log(user);
                 return (
                   <Contact_ForContactChats
                     key={user[0]}

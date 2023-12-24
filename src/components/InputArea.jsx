@@ -22,7 +22,6 @@ const InputArea = () => {
   const [img, setImage] = useState(null);
 
   const handleSend = async () => {
-    console.log(data.combinedId, currentUser.uid);
     if (img) {
       //update the chat collection with the image and text
       //uploadImageAndText(img,combinedId,currentUserId,text)

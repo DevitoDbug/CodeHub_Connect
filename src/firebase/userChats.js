@@ -49,7 +49,7 @@ export const updateLastMessageAndDate = async (
   lastMessage,
 ) => {
   await updateDoc(doc(db, 'userChats', String(userID)), {
-    [combinedID + '.lastMessage']: { lastMessage },
+    [combinedID + '.lastMessage']: { text: lastMessage },
     [combinedID + '.date']: serverTimestamp(),
   });
 };
