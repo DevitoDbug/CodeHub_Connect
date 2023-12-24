@@ -61,15 +61,26 @@ const Search = () => {
   return (
     <div className="absolute left-[10%] top-[10%] flex h-[40%] w-[80%] flex-col items-center rounded-lg bg-[#bae9f8] px-1 py-2 shadow-lg md:left-[30%] md:w-[50%] lg:left-[30%] lg:top-[20%] lg:h-[50%] lg:w-[40%]">
       <div className="flex w-full items-start justify-between ">
-        <div className="flex gap-2 p-2">
+        <div className="flex gap-3 p-2">
           <button
-            className="self-end rounded-xl border-2 border-C_BorderLightBlue p-1 text-[110%] font-bold text-C_GreyBorder"
+            className={`text-C_TextBlackFade border-C_BorderBlackFade self-end rounded-xl border-2 px-2 py-1 text-[110%] font-bold transition-transform duration-300 ease-in-out first-letter:capitalize 
+            ${
+              toggleContactList
+                ? 'scale-110 border-none bg-C_DarkBlue text-C_TextWhiteDull'
+                : ''
+            } `}
             onClick={() => setToggleContactList(true)}
           >
             Folowers
           </button>
           <button
-            className="self-end rounded-xl border-2 border-C_BorderLightBlue p-1 text-[110%] font-bold text-C_GreyBorder"
+            className={`text-C_TextBlackFade border-C_BorderBlackFade self-end rounded-xl border-2  p-1 text-[110%] font-bold transition-transform duration-300 ease-in-out first-letter:capitalize
+            ${
+              !toggleContactList
+                ? 'scale-110 border-none bg-C_DarkBlue text-C_TextWhiteDull'
+                : ''
+            } 
+            `}
             onClick={() => setToggleContactList(false)}
           >
             Following
