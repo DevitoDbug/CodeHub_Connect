@@ -30,11 +30,6 @@ const ContactChats = () => {
     currentUser?.uid && getChats();
   }, [currentUser?.uid]);
 
-  // //log out chats using useEffect
-  // useEffect(() => {
-  //   console.log(chats);
-  // }, [chats]);
-
   return (
     <aside className=" h-full w-full">
       <div className=" h-[12%] md:mt-2 md:h-[9%] lg:h-[15%]">
@@ -46,7 +41,6 @@ const ContactChats = () => {
             Object.entries(chats)
               ?.sort((a, b) => b[1].date - a[1].date)
               .map((user) => {
-                console.log(user);
                 return (
                   <Contact_ForContactChats
                     key={user[0]}

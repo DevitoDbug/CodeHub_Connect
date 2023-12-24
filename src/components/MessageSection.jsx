@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Message from './Message';
 import InputArea from './InputArea';
-// import { LoginContext } from '../context/AuthContext';
 import { ChatContext } from '../context/ChatContext';
 import { db } from '../firebase';
 import { doc, onSnapshot } from 'firebase/firestore';

@@ -21,7 +21,6 @@ const Login = () => {
 
     //Add user to the users collection
     const doesUserExistInDb = await doesUserExist(loggedInUserUid);
-    console.log('Does user exist: ', doesUserExistInDb);
     if (doesUserExistInDb) {
       //Update the info of the user
       //updateUser(uid, displayName,nickName,email,photoURL)
