@@ -1,0 +1,58 @@
+const Contact_ForContactChats = ({
+  userInfo,
+  isSelected,
+  lastMessage,
+  lastMessageDate,
+  onClick,
+}) => {
+  const darkBg = isSelected
+    ? 'rounded-xl bg-C_DarkBlue shadow-lg shadow-C_DarkBlueShadow'
+    : 'border-b-2 border-C_BorderLightBlue';
+
+  console.log(userInfo);
+  return (
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+    <div
+      onClick={() => {
+        onClick();
+      }}
+      className={`flex h-20 w-full flex-row items-center justify-between p-2 ${darkBg} `}
+    >
+      <div className="flex flex-row gap-2">
+        <img
+          src={userInfo?.avatar_url}
+          alt=""
+          className={`rounded-full border-2 border-C_Gold object-cover ${
+            isSelected ? 'h-14 w-14 ' : 'h-12 w-12 '
+          } `}
+        />
+        <div className="flex flex-col justify-center">
+          <span
+            className={`text-xs font-semibold ${
+              isSelected ? 'text-C_TextWhite' : 'text-C_TextBlack'
+            }`}
+          >
+            {userInfo?.login}
+          </span>
+          <span
+            className={`text-[0.625rem] font-light  ${
+              isSelected ? 'text-C_TextWhiteDull' : 'text-C_TextBlack'
+            }`}
+          >
+            {lastMessage?.text}
+          </span>
+        </div>
+      </div>
+      <div
+        className={`text-[0.625rem] font-normal ${
+          isSelected ? 'text-C_TextWhite' : 'text-C_TextBlack'
+        }`}
+      >
+        {lastMessageDate &&
+          lastMessageDate.toDate().toLocaleDateString('en-US')}
+      </div>
+    </div>
+  );
+};
+
+export default Contact_ForContactChats;

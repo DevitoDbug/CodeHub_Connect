@@ -26,7 +26,7 @@ const ChatContextProider = ({ children }) => {
 
   const INITIAL_STATE = {
     combinedId: 'null',
-    userInfo: {},
+    userInfo: {}, // Fields in the userInfo object are : .id , .name, .login, .email, .avatar_url
   };
 
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);

@@ -29,6 +29,19 @@ export const AuthContextProvider = ({ children }) => {
     };
   }, []);
 
+  // reloadUserInfo:
+  // createdAt: ""
+  // email: ""
+  // emailVerified: false
+  // lastLoginAt: ""
+  // lastRefreshAt: ""
+  // localId: ""
+  // photoUrl: ""
+  // providerUserInfo:
+  // [{…}]
+  // screenName: ""
+  // validSince: ""
+
   return (
     <LoginContext.Provider
       value={{ currentUser, accessToken, setAccessToken, currentUserBulk }}

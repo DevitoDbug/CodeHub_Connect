@@ -4,7 +4,7 @@ import OptionsNavBar from './OptionsNavBar';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
 import { LoginContext } from '../context/AuthContext';
-import Contact from './Contact';
+import Contact_ForContactChats from './Contact_ForContactChats';
 
 const ContactChats = () => {
   const [chats, setChats] = useState([]);
@@ -46,14 +46,16 @@ const ContactChats = () => {
             Object.entries(chats)
               ?.sort((a, b) => b[1].date - a[1].date)
               .map((user) => {
-                <Contact
-                  key={user[0]}
-                  user={user[1].userInfo}
-                  lastMessage={user[1].lastMessage}
-                  lastMessageDate={user[1].date}
-                  isSelected={isActive === user[0]}
-                  onClick={() => handleContactClick(user[0])}
-                />;
+                return (
+                  <Contact_ForContactChats
+                    key={user[0]}
+                    userInfo={user[1].userInfo}
+                    lastMessage={user[1].lastMessage}
+                    lastMessageDate={user[1].date}
+                    isSelected={isActive === user[0]}
+                    onClick={() => handleContactClick(user[0])}
+                  />
+                );
               })}
         </div>
         <div>

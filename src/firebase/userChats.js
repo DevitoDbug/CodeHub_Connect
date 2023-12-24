@@ -32,11 +32,11 @@ export const updateUserChats = async (
 ) => {
   await updateDoc(doc(db, 'userChats', String(userID)), {
     [combinedID + '.userInfo']: {
-      otherUserID,
-      otherUserDisplayName,
-      otherUserNickName,
-      otherUserEmail,
-      otherUserPhotoURL,
+      id: otherUserID,
+      name: otherUserDisplayName,
+      login: otherUserNickName,
+      email: otherUserEmail,
+      avatar_url: otherUserPhotoURL,
     },
     [combinedID + '.date']: serverTimestamp(),
   });

@@ -7,12 +7,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useContext, useState } from 'react';
 import { ChatContext } from '../context/ChatContext';
 import { LoginContext } from '../context/AuthContext';
-import { updateLastMessageAndDate } from '../firebase/userChats';
+import {
+  updateLastMessageAndDate,
+  updateUserChats,
+} from '../firebase/userChats';
 import { uploadImageAndText, uploadText } from '../firebase/chat';
 
 const InputArea = () => {
   const { data } = useContext(ChatContext);
   const { currentUser } = useContext(LoginContext);
+  const { currentUserBulk } = useContext(LoginContext);
 
   const [text, setText] = useState('');
   const [img, setImage] = useState(null);
@@ -29,12 +33,33 @@ const InputArea = () => {
       await uploadText(data.combinedId, currentUser.uid, text);
     }
 
+    //update the userInfo object in the userChats collection with the details of the user who sent the message
+    //updateUserChats(  userID,combinedID,otherUserID,otherUserDisplayName,otherUserNickName,otherUserEmail,otherUserPhotoURL,)
+    await updateUserChats(
+      currentUser.uid,
+      data.combinedId,
+      data.userInfo.id,
+      data.userInfo.name,
+      data.userInfo.login,
+      data.userInfo.email,
+      data.userInfo.avatar_url,
+    );
+
+    await updateUserChats(
+      data.userInfo.id,
+      data.combinedId,
+      currentUser.uid,
+      currentUser.displayName,
+      currentUserBulk.reloadUserInfo.screenName,
+      currentUser.email,
+      currentUser.photoURL,
+    );
+
     //Update the last message and date in the userChats collection for both users
     //updateLastMessageAndDate(userID, combinedID, lastMessage) - for user 1
     await updateLastMessageAndDate(currentUser.uid, data.combinedId, text);
 
     //updateLastMessageAndDate(userID, combinedID, lastMessage) - for user 2
-    // Fields in the data.userInfo object are : .id , .name, .login, .email, .avatar_url
     await updateLastMessageAndDate(data.userInfo.id, data.combinedId, text);
     setText('');
     setImage(null);

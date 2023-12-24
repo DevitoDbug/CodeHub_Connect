@@ -39,9 +39,11 @@ const Contact = ({
       setUser(userData);
     }
     if (userStatus === 'error') {
-      console.log(userError);
+      if (userInfo) {
+        console.log(userError);
+      }
     }
-  }, [userStatus, userData, userError]);
+  }, [userStatus, userData, userError, userInfo]);
 
   const combinedId =
     currentUser?.uid > user?.id
