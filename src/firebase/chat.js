@@ -14,14 +14,14 @@ import { v4 as uuid } from 'uuid';
 
 //Create message in the chat as an empty array
 export const createChat = async (uid) => {
-  await setDoc(doc(db, 'chat', String(uid)), {
+  await setDoc(doc(db, 'chats', String(uid)), {
     messages: [],
   });
 };
 
 //Does chat exist in the chats collection in firebase
 export const doesChatExist = async (id) => {
-  const docRef = doc(db, 'chat', String(id));
+  const docRef = doc(db, 'chats', String(id));
   const docSnap = await getDoc(docRef);
   return docSnap.exists();
 };

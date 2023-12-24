@@ -22,11 +22,11 @@ const InputArea = () => {
     if (img) {
       //update the chat collection with the image and text
       //uploadImageAndText(img,combinedId,currentUserId,text)
-      uploadImageAndText(img, data.combinedId, currentUser.uid, text);
+      await uploadImageAndText(img, data.combinedId, currentUser.uid, text);
     } else {
       //update the chat collection with the text
       //uploadText(combinedId,currentUserId,text)
-      uploadText(data.combinedId, currentUser.uid, text);
+      await uploadText(data.combinedId, currentUser.uid, text);
     }
 
     //Update the last message and date in the userChats collection for both users
