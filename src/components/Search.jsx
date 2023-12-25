@@ -63,7 +63,7 @@ const Search = () => {
       <div className="flex w-full items-start justify-between ">
         <div className="flex gap-3 p-2">
           <button
-            className={`text-C_TextBlackFade border-C_BorderBlackFade self-end rounded-xl border-2 px-2 py-1 text-[110%] font-bold transition-transform duration-300 ease-in-out first-letter:capitalize 
+            className={`self-end rounded-xl border-2 border-C_BorderBlackFade px-3 py-1 text-[105%] font-bold text-C_TextBlackFade transition-transform duration-300 ease-in-out first-letter:capitalize 
             ${
               toggleContactList
                 ? 'scale-110 border-none bg-C_DarkBlue text-C_TextWhiteDull'
@@ -74,7 +74,7 @@ const Search = () => {
             Folowers
           </button>
           <button
-            className={`text-C_TextBlackFade border-C_BorderBlackFade self-end rounded-xl border-2  p-1 text-[110%] font-bold transition-transform duration-300 ease-in-out first-letter:capitalize
+            className={`self-end rounded-xl border-2 border-C_BorderBlackFade px-3 py-1 text-[105%] font-bold text-C_TextBlackFade transition-transform duration-300 ease-in-out first-letter:capitalize
             ${
               !toggleContactList
                 ? 'scale-110 border-none bg-C_DarkBlue text-C_TextWhiteDull'
