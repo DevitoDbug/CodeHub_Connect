@@ -3,6 +3,8 @@ import { LoginContext } from '../context/AuthContext';
 
 const Message = ({ data, message, displayMetaData }) => {
   const { currentUser } = useContext(LoginContext);
+  const { currentUserBulk } = useContext(LoginContext);
+  console.log(currentUserBulk);
 
   const ref = useRef();
 
@@ -20,8 +22,8 @@ const Message = ({ data, message, displayMetaData }) => {
       {displayMetaData && (
         <span className="sms-user-name ">
           {currentUser.uid === message.senderId
-            ? currentUser.displayName
-            : data?.displayName}
+            ? currentUserBulk.reloadUserInfo.screenName
+            : data?.login}
         </span>
       )}
 
@@ -31,7 +33,7 @@ const Message = ({ data, message, displayMetaData }) => {
             src={
               currentUser.uid === message.senderId
                 ? currentUser.photoURL
-                : data?.photoURL
+                : data?.avatar_url
             }
             alt="profile"
             className="h-8 w-8 rounded-full border-2 border-C_Gold "
