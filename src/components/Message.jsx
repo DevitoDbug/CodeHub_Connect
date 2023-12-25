@@ -4,8 +4,6 @@ import { LoginContext } from '../context/AuthContext';
 const Message = ({ data, message, displayMetaData }) => {
   const { currentUser } = useContext(LoginContext);
   const { currentUserBulk } = useContext(LoginContext);
-  console.log(currentUserBulk);
-
   const ref = useRef();
 
   useEffect(() => {
