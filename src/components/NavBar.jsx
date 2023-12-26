@@ -1,7 +1,4 @@
-import {
-  faToggleOff,
-  faToggleOn,
-} from '@fortawesome/free-solid-svg-icons';
+import { faToggleOff, faToggleOn } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useContext, useState } from 'react';
 import { signOut } from 'firebase/auth';
@@ -28,7 +25,7 @@ const NavBar = () => {
   return (
     <div className="m-1 flex h-[90%] flex-row items-center justify-between gap-2 rounded-xl bg-C_LightBlue px-1 py-1 ">
       <h1 className="ml-1 flex flex-col text-xl font-bold text-C_TextBlack">
-        Artlife
+        CodeHub
         <div className="m-0 h-1 w-[85%] animate-pulse rounded-xl bg-C_DarkBlue"></div>
       </h1>
       <div className="flex flex-row justify-around gap-2">
