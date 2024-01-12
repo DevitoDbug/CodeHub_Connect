@@ -1,34 +1,37 @@
-import React, { useContext, useEffect, useState } from 'react';
-import NavBar from './NavBar';
-import OptionsNavBar from './OptionsNavBar';
-import { doc, onSnapshot } from 'firebase/firestore';
-import { db } from '../firebase';
-import { LoginContext } from '../context/AuthContext';
-import Contact_ForContactChats from './Contact_ForContactChats';
+import { useContext, useEffect, useState } from "react";
+import NavBar from "./NavBar";
+import OptionsNavBar from "./OptionsNavBar";
+import { DocumentData, doc, onSnapshot } from "firebase/firestore";
+import { db } from "../firebase";
+import { LoginContext } from "../context/AuthContext";
+import { Contact_ForContactChats } from "./Contact_ForContactChats";
 
 const ContactChats = () => {
-  const [chats, setChats] = useState([]);
+  const [chats, setChats] = useState<DocumentData | undefined>([]);
   const { currentUser } = useContext(LoginContext);
 
-  const [isActive, setIsActive] = useState(null);
+  const [isActive, setIsActive] = useState("");
 
-  const handleContactClick = (id) => {
+  const handleContactClick = (id: string) => {
     setIsActive(id);
   };
 
   //fetches chats everytime user changes
   useEffect(() => {
     const getChats = () => {
-      const unsub = onSnapshot(doc(db, 'userChats', currentUser.uid), (doc) => {
-        setChats(doc.data());
-      });
-      return () => {
-        unsub();
-      };
+      if (currentUser.uid) {
+        const ref = doc(db, "userChats", currentUser.uid);
+        const unsub = onSnapshot(ref, (doc) => {
+          setChats(doc.data());
+        });
+        return () => {
+          unsub();
+        };
+      } else return;
     };
 
-    currentUser?.uid && getChats();
-  }, [currentUser?.uid]);
+    getChats();
+  }, [currentUser.uid]);
 
   return (
     <aside className=" h-full w-full">
