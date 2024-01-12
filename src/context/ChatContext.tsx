@@ -1,7 +1,6 @@
 import { FC, ReactNode, createContext, useContext, useReducer } from "react";
 import { LoginContext } from "./AuthContext";
 
-export interface ChatContextParams {}
 export interface ChatContextProider {
   children: ReactNode;
 }
@@ -22,7 +21,18 @@ export interface ChangeChatRecipientAction {
   payload: UserInfo;
 }
 
-export const ChatContext = createContext<ChatContextParams>({});
+export interface ChatContextParams {
+  data: ChatState;
+  dispatch: React.Dispatch<ChangeChatRecipientAction>;
+}
+
+export const ChatContext = createContext<ChatContextParams>({
+  data: {
+    userInfo: {} as UserInfo,
+    combinedId: "null",
+  },
+  dispatch: () => {},
+});
 
 export const ChatContextProider: FC<ChatContextProider> = ({ children }) => {
   const { currentUser } = useContext(LoginContext);

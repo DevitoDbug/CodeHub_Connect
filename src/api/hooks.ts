@@ -1,3 +1,4 @@
+import { ChangeChatRecipientAction } from "../context/ChatContext";
 import { fetchFollowers, fetchFollowing, fetchUser } from "./transactions";
 import { useQuery } from "@tanstack/react-query";
 

@@ -7,6 +7,8 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../firebase";
+import { ChangeChatRecipientAction } from "../context/ChatContext";
+import { useFetchUser } from "../api/hooks";
 
 interface addUserParams {
   uid: string;
@@ -84,4 +86,23 @@ export const deleteUser = async (uid: string) => {
     photoURL: deleteField(),
     updatedAt: serverTimestamp(),
   });
+};
+
+export const ChangeChatRecipient = (
+  name: string,
+  dispatch: React.Dispatch<ChangeChatRecipientAction>
+) => {
+  //fetched user data
+  const {
+    data: userData,
+    status: userStatus,
+    error: userError,
+  } = useFetchUser(name);
+
+  if (userStatus === "success") {
+    dispatch({ type: "CHANGE_CHAT_RECIPIENT", payload: userData });
+  }
+  if (userStatus === "error") {
+    throw Error(userError.message);
+  }
 };
