@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { FC, useContext, useState } from "react";
 import { ChangeChatRecipient, addUser, doesUserExist } from "../firebase/users";
 import { createUserChats } from "../firebase/userChats";
 import { createChat, doesChatExist } from "../firebase/chat";
@@ -12,7 +12,11 @@ interface ContactParams {
   onClick: () => void;
 }
 
-export const Contact = ({ userInfo, isSelected, onClick }: ContactParams) => {
+export const Contact: FC<ContactParams> = ({
+  userInfo,
+  isSelected,
+  onClick,
+}: ContactParams) => {
   const { scrollToMessageSection } = useContext(NavContext);
   const { setSearchOpen } = useContext(SearchContext);
   const { data, dispatch } = useContext(ChatContext);
