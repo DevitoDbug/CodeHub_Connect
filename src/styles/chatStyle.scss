@@ -1,0 +1,65 @@
+html {
+  height: --webkit-fill-available;
+}
+body {
+  height: --webkit-fill-available;
+}
+.Home {
+  height: --webkit-fill-available;
+}
+.sms {
+  display: flex;
+  flex-direction: column;
+  .sms-user-name {
+    color: #52585d;
+    font-weight: 600;
+    font-size: small;
+  }
+  .sms-info {
+    display: flex;
+    flex-direction: row;
+    gap: 0.7rem;
+    .sms-content {
+      max-width: 60%;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      .sms-content-text {
+        color: #52585d;
+        font-weight: 400;
+        background-color: #e3f6fc;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        span {
+          color: #6588de;
+          text-align: right;
+          align-self: end;
+          font-size: 10px;
+          margin-top: 0.5rem;
+          margin-bottom: -0.9rem;
+        }
+      }
+    }
+  }
+
+  &.owner-sms {
+    align-items: flex-end;
+    .sms-info {
+      flex-direction: row-reverse;
+    }
+    .sms-content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      align-items: flex-end;
+      .sms-content-text {
+        background-color: #f3ba4a;
+        color: #fdfdfe;
+        span {
+          color: #fdfdfe;
+        }
+      }
+    }
+  }
+}
