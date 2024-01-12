@@ -2,8 +2,15 @@ import { FC, ReactNode, createContext, useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase";
 
+export interface currentUser {
+  displayName: null | string;
+  email: null | string;
+  photoURL: null | string;
+  uid: null | string;
+}
+
 export interface LoginContextParams {
-  currentUser: object;
+  currentUser: currentUser;
   accessToken: string;
   setAccessToken: React.Dispatch<React.SetStateAction<string>>;
   currentUserBulk: object;
@@ -14,14 +21,24 @@ export interface LoginContextProp {
 }
 
 export const LoginContext = createContext<LoginContextParams>({
-  currentUser: {},
+  currentUser: {
+    displayName: "",
+    email: "",
+    photoURL: "",
+    uid: "",
+  },
   accessToken: "",
   setAccessToken: () => {},
   currentUserBulk: {},
 });
 
 export const AuthContextProvider: FC<LoginContextProp> = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState({});
+  const [currentUser, setCurrentUser] = useState({
+    displayName: "",
+    email: "",
+    photoURL: "",
+    uid: "",
+  });
   const [currentUserBulk, setCurrentUserBulk] = useState({});
 
   const [accessToken, setAccessToken] = useState("");
@@ -38,8 +55,15 @@ export const AuthContextProvider: FC<LoginContextProp> = ({ children }) => {
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
       if (user?.providerData[0]) {
-        const userData: object = user?.providerData[0];
-        setCurrentUser(userData);
+        const userData = user.providerData[0];
+
+        setCurrentUser({
+          displayName: userData.displayName || "",
+          email: userData.email || "",
+          photoURL: userData.photoURL || "",
+          uid: userData.uid || "",
+        });
+
         setCurrentUserBulk(user);
       } else {
         throw Error("user is undefined");
