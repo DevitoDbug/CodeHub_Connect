@@ -1,15 +1,9 @@
 import { FC, ReactNode, createContext, useContext, useReducer } from "react";
 import { LoginContext } from "./AuthContext";
+import { UserInfo } from "firebase/auth";
 
 export interface ChatContextProider {
   children: ReactNode;
-}
-export interface UserInfo {
-  id: string;
-  name: string;
-  login: string;
-  email: string;
-  avatar_url: string;
 }
 export interface ChatState {
   userInfo: UserInfo;
@@ -51,9 +45,9 @@ export const ChatContextProider: FC<ChatContextProider> = ({ children }) => {
           //setting the combinedId
           userInfo: action.payload,
           combinedId:
-            currentUserUid > action.payload.id
-              ? currentUserUid + action.payload.id
-              : action.payload.id + currentUserUid,
+            currentUserUid > action.payload.uid
+              ? currentUserUid + action.payload.uid
+              : action.payload.uid + currentUserUid,
         };
       default:
         throw new Error("That action type is not defined");

@@ -15,20 +15,23 @@ import {
 } from "../api/hooks";
 import { UserInfo } from "firebase/auth";
 
-interface addUserParams {
+interface AddUserParams {
   uid: string;
   displayName: string;
-  nickName: string;
   email: string;
   photoURL: string;
 }
 
-interface updateUserParams {
+interface UpdateUserParams {
   uid: string;
   displayName: string;
-  nickName: string;
   email: string;
   photoURL: string;
+}
+
+interface Contact {
+  followers: UserInfo[];
+  following: UserInfo[];
 }
 
 //Check if user exitst in firebase user collection
@@ -43,13 +46,11 @@ export const doesUserExist = async (id: string) => {
 export const addUser = async ({
   uid,
   displayName,
-  nickName,
   email,
   photoURL,
-}: addUserParams) => {
+}: AddUserParams) => {
   await setDoc(doc(db, "users", String(uid)), {
     displayName,
-    nickName,
     email,
     photoURL,
     createdAt: serverTimestamp(),
@@ -67,13 +68,11 @@ export const getUser = async (uid: string) => {
 export const updateUser = async ({
   uid,
   displayName,
-  nickName,
   email,
   photoURL,
-}: updateUserParams) => {
+}: UpdateUserParams) => {
   await updateDoc(doc(db, "users", uid), {
     displayName,
-    nickName,
     email,
     photoURL,
     updatedAt: serverTimestamp(),
@@ -112,19 +111,14 @@ export const ChangeChatRecipient = (
   }
 };
 
-export const FetchContacts = (name: string) => {
+export const FetchContacts = (name: string): Contact => {
   if (name === null) {
     throw Error("There is no user name to fetch data");
   }
-  //UserInfo
-  //  displayName: null,
-  // email: null,
-  // phoneNumber: null,
-  // photoURL: null,
-  // providerId: "",
-  // uid: "",
 
-  let contacts: UserInfo[] = [];
+  let followers: UserInfo[] = [];
+  let following: UserInfo[] = [];
+
   const {
     data: followersData,
     status: followersStatus,
@@ -139,17 +133,17 @@ export const FetchContacts = (name: string) => {
   } = useFetchFollowing(name);
 
   if (followersStatus === "success") {
-    contacts = [...(Object.values(followersData) as UserInfo[])];
+    followers = followersData;
   }
   if (followersStatus === "error") {
-    throw Error(followersError?.message);
+    throw Error(followersError.message);
   }
 
   if (followingStatus === "success") {
-    contacts = [...contacts, ...(Object.values(followingData) as UserInfo[])];
+    following = followingData;
   }
   if (followingStatus === "error") {
-    throw Error(followingError?.message);
+    throw Error(followingError.message);
   }
-  return contacts;
+  return { followers, following };
 };

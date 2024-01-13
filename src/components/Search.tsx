@@ -1,53 +1,29 @@
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { useContext } from "react";
 import { SearchContext } from "../context/SearchContext";
 import { Contact } from "./Contact";
 import { LoginContext } from "../context/AuthContext";
-import { useFetchFollowers, useFetchFollowing } from "../api/hooks";
+import { FetchContacts as fetchContacts } from "../firebase/users";
+import { UserInfo } from "firebase/auth";
 
-const Search = () => {
+export const Search: FC = () => {
   const { currentUserBulk } = useContext(LoginContext);
   const { setSearchOpen } = useContext(SearchContext);
   const [isActive, setIsActive] = useState("");
-  const [followers, setFollowers] = useState([]);
-  const [following, setFollowing] = useState([]);
+  const [followers, setFollowers] = useState<UserInfo[]>([]);
+  const [following, setFollowing] = useState<UserInfo[]>([]);
   const [toggleContactList, setToggleContactList] = useState(true);
-
-  //Followers data
-  const {
-    data: followersData,
-    status: followersStatus,
-    error: followersError,
-  } = useFetchFollowers(currentUserBulk.screenName);
-
-  //Following data
-  const {
-    data: followingData,
-    status: followingStatus,
-    error: followingError,
-  } = useFetchFollowing(currentUserBulk.screenName);
-
-  //Update followers data
-  useEffect(() => {
-    if (followersStatus === "success") {
-      setFollowers(Object.values(followersData));
-    }
-    if (followersStatus === "error") {
-      console.log(followersError);
-    }
-  }, [followersStatus, followersData, followersError]);
 
   //Update following data
   useEffect(() => {
-    if (followingStatus === "success") {
-      setFollowing(Object.values(followingData));
+    if (currentUserBulk.screenName) {
+      const contact = fetchContacts(currentUserBulk.screenName);
+      setFollowers(contact.followers);
+      setFollowing(contact.following);
     }
-    if (followingStatus === "error") {
-      console.log(followingError);
-    }
-  }, [followingStatus, followingData, followingError]);
+  }, [currentUserBulk]);
 
   const handleCloseSearch = () => {
     setSearchOpen(false);
@@ -96,20 +72,15 @@ const Search = () => {
       </div>
       <div className="h-full w-full overflow-y-scroll bg-[#bae9f8f5]">
         {toggleContactList ? (
-          followersStatus === "success" ? (
+          followers ? (
             followers?.map((follower) => {
               return (
                 <Contact
-                  key={follower.id}
+                  key={follower.uid}
                   userInfo={follower}
-                  userID={follower.id}
-                  isSelected={isActive === follower.id}
+                  isSelected={isActive === follower.uid}
                   onClick={() => {
-                    handleContactClick(
-                      follower.id,
-                      follower.login,
-                      follower.avatar_url
-                    );
+                    handleContactClick(follower.uid);
                   }}
                 />
               );
@@ -117,16 +88,13 @@ const Search = () => {
           ) : (
             <p>Loading followers...</p>
           )
-        ) : followingStatus === "success" ? (
+        ) : following ? (
           following?.map((follow) => (
             <Contact
-              key={follow.id}
+              key={follow.uid}
               userInfo={follow}
-              userID={follow.id}
-              isSelected={isActive === follow.id}
-              onClick={() =>
-                handleContactClick(follow.id, follow.login, follow.avatar_url)
-              }
+              isSelected={isActive === follow.uid}
+              onClick={() => handleContactClick(follow.uid)}
             />
           ))
         ) : (
@@ -135,37 +103,4 @@ const Search = () => {
       </div>
     </div>
   );
-};
-export default Search;
-
-export const fetchContacts = (name: string) => {
-  if (name === null) {
-    throw Error("There is no user name to fetch data");
-  }
-  const {
-    data: followersData,
-    status: followersStatus,
-    error: followersError,
-  } = useFetchFollowers(name);
-
-  //Following data
-  const {
-    data: followingData,
-    status: followingStatus,
-    error: followingError,
-  } = useFetchFollowing(name);
-
-  if (followersStatus === "success") {
-    console.log(followersData);
-  }
-  if (followersStatus === "error") {
-    console.log(followersError);
-  }
-
-  if (followingStatus === "success") {
-    console.log(followingData);
-  }
-  if (followingStatus === "error") {
-    console.log(followingError);
-  }
 };

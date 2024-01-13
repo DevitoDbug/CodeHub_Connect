@@ -84,7 +84,8 @@ export const AuthContextProvider: FC<LoginContextProp> = ({ children }) => {
         });
 
         setCurrentUserBulk({
-          screenName: user.displayName || "",
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          screenName: (user as any).reloadUserInfo?.screenName || "",
           email: user.email || "",
           photoURL: user.photoURL || "",
         });

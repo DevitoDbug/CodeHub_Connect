@@ -4,7 +4,8 @@ import { createUserChats } from "../firebase/userChats";
 import { createChat, doesChatExist } from "../firebase/chat";
 import { NavContext } from "../pages/Home";
 import { SearchContext } from "../context/SearchContext";
-import { ChatContext, UserInfo } from "../context/ChatContext";
+import { ChatContext } from "../context/ChatContext";
+import { UserInfo } from "firebase/auth";
 
 interface ContactParams {
   userInfo: UserInfo;
@@ -22,11 +23,12 @@ export const Contact: FC<ContactParams> = ({
   const { data, dispatch } = useContext(ChatContext);
 
   const [user, setUser] = useState<UserInfo>({
-    id: "",
-    name: "",
-    login: "",
-    email: "",
-    avatar_url: "",
+    displayName: null,
+    email: null,
+    phoneNumber: null,
+    photoURL: null,
+    providerId: "github",
+    uid: "",
   });
 
   const darkBg = isSelected
@@ -34,25 +36,27 @@ export const Contact: FC<ContactParams> = ({
     : "border-b-2 border-C_BorderLightBlue";
 
   const handleContactSelected = async () => {
-    ChangeChatRecipient(userInfo.login, dispatch);
+    if (!userInfo.displayName) {
+      throw Error("User name is null");
+    }
+    ChangeChatRecipient(userInfo.displayName, dispatch);
     setUser(data.userInfo);
 
     //Check to see if user is in the users collection
-    const userExitst = await doesUserExist(user.id);
+    const userExitst = await doesUserExist(user.uid);
     if (!userExitst && user) {
       //Add user to the users collection
       //addUser (uid, displayName, nickName, email, photoURL)
       await addUser({
-        uid: user.id,
-        displayName: user.name,
-        nickName: user.login,
-        email: user.email,
-        photoURL: user.avatar_url,
+        uid: user.uid || "",
+        displayName: user.displayName || "",
+        email: user.email || "",
+        photoURL: user.photoURL || "",
       });
 
       //Add user to the userChats collection
       //createUserChats(id)
-      await createUserChats(user.id);
+      await createUserChats(user.uid);
     }
 
     //Check to see if there is chat between our two users in the chats collection
@@ -77,7 +81,7 @@ export const Contact: FC<ContactParams> = ({
     >
       <div className="flex flex-row gap-2">
         <img
-          src={user?.avatar_url}
+          src={user.photoURL ? user.photoURL : ""}
           alt=""
           className={`rounded-full border-2 border-C_Gold object-cover ${
             isSelected ? "h-14 w-14 " : "h-12 w-12 "
@@ -89,7 +93,7 @@ export const Contact: FC<ContactParams> = ({
               isSelected ? "text-C_TextWhite" : "text-C_TextBlack"
             }`}
           >
-            {user?.login}
+            {user.displayName}
           </span>
         </div>
       </div>
