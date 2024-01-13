@@ -77,7 +77,8 @@ export const AuthContextProvider: FC<LoginContextProp> = ({ children }) => {
         const userData = user.providerData[0];
 
         setCurrentUser({
-          displayName: userData.displayName || "",
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          displayName: (user as any).reloadUserInfo?.screenName || "",
           email: userData.email || "",
           photoURL: userData.photoURL || "",
           uid: userData.uid || "",
