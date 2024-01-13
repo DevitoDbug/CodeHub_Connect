@@ -9,16 +9,35 @@ export interface currentUser {
   uid: null | string;
 }
 
+export interface currentUserBulk {
+  screenName: null | string;
+  email: null | string;
+  photoURL: null | string;
+}
+
 export interface LoginContextParams {
   currentUser: currentUser;
   accessToken: string;
   setAccessToken: React.Dispatch<React.SetStateAction<string>>;
-  currentUserBulk: object;
+  currentUserBulk: currentUserBulk;
 }
 
 export interface LoginContextProp {
   children: ReactNode;
 }
+
+// reloadUserInfo:
+// createdAt: ""
+// email: ""
+// emailVerified: false
+// lastLoginAt: ""
+// lastRefreshAt: ""
+// localId: ""
+// photoUrl: ""
+// providerUserInfo:
+// [{…}]
+// screenName: ""
+// validSince: ""
 
 export const LoginContext = createContext<LoginContextParams>({
   currentUser: {
@@ -29,27 +48,27 @@ export const LoginContext = createContext<LoginContextParams>({
   },
   accessToken: "",
   setAccessToken: () => {},
-  currentUserBulk: {},
+  currentUserBulk: {
+    screenName: "",
+    email: "",
+    photoURL: "",
+  },
 });
 
 export const AuthContextProvider: FC<LoginContextProp> = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState({
+  const [currentUser, setCurrentUser] = useState<currentUser>({
     displayName: "",
     email: "",
     photoURL: "",
     uid: "",
   });
-  const [currentUserBulk, setCurrentUserBulk] = useState({});
+  const [currentUserBulk, setCurrentUserBulk] = useState<currentUserBulk>({
+    screenName: "",
+    email: "",
+    photoURL: "",
+  });
 
   const [accessToken, setAccessToken] = useState("");
-
-  //.providerData[0] has the following
-  // displayName: null;
-  // email: 'davidochiengy@gmail.com';
-  // phoneNumber: null;
-  // photoURL: 'https://avatars.githubusercontent.com/u/105533289?v=4';
-  // providerId: 'github.com';
-  // uid: '105533289';
 
   //checking for changes in current user
   useEffect(() => {
@@ -64,7 +83,11 @@ export const AuthContextProvider: FC<LoginContextProp> = ({ children }) => {
           uid: userData.uid || "",
         });
 
-        setCurrentUserBulk(user);
+        setCurrentUserBulk({
+          screenName: user.displayName || "",
+          email: user.email || "",
+          photoURL: user.photoURL || "",
+        });
       } else {
         throw Error("user is undefined");
       }

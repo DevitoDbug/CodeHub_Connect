@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClose } from '@fortawesome/free-solid-svg-icons';
-import { useContext } from 'react';
-import { SearchContext } from '../context/SearchContext';
-import Contact from './Contact';
-import { LoginContext } from '../context/AuthContext';
-import { useFetchFollowers, useFetchFollowing } from '../api/hooks';
+import { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClose } from "@fortawesome/free-solid-svg-icons";
+import { useContext } from "react";
+import { SearchContext } from "../context/SearchContext";
+import { Contact } from "./Contact";
+import { LoginContext } from "../context/AuthContext";
+import { useFetchFollowers, useFetchFollowing } from "../api/hooks";
 
 const Search = () => {
   const { currentUserBulk } = useContext(LoginContext);
-  const [, setSearchOpen] = useContext(SearchContext);
-  const [isActive, setIsActive] = useState(null);
+  const { setSearchOpen } = useContext(SearchContext);
+  const [isActive, setIsActive] = useState("");
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
   const [toggleContactList, setToggleContactList] = useState(true);
@@ -20,31 +20,31 @@ const Search = () => {
     data: followersData,
     status: followersStatus,
     error: followersError,
-  } = useFetchFollowers(currentUserBulk?.reloadUserInfo?.screenName);
+  } = useFetchFollowers(currentUserBulk.screenName);
 
   //Following data
   const {
     data: followingData,
     status: followingStatus,
     error: followingError,
-  } = useFetchFollowing(currentUserBulk?.reloadUserInfo?.screenName);
+  } = useFetchFollowing(currentUserBulk.screenName);
 
   //Update followers data
   useEffect(() => {
-    if (followersStatus === 'success') {
+    if (followersStatus === "success") {
       setFollowers(Object.values(followersData));
     }
-    if (followersStatus === 'error') {
+    if (followersStatus === "error") {
       console.log(followersError);
     }
   }, [followersStatus, followersData, followersError]);
 
   //Update following data
   useEffect(() => {
-    if (followingStatus === 'success') {
+    if (followingStatus === "success") {
       setFollowing(Object.values(followingData));
     }
-    if (followingStatus === 'error') {
+    if (followingStatus === "error") {
       console.log(followingError);
     }
   }, [followingStatus, followingData, followingError]);
@@ -53,7 +53,7 @@ const Search = () => {
     setSearchOpen(false);
   };
 
-  const handleContactClick = (id) => {
+  const handleContactClick = (id: string) => {
     setIsActive(id);
   };
 
@@ -66,8 +66,8 @@ const Search = () => {
             className={`self-end rounded-xl border-2 border-C_BorderBlackFade px-3 py-1 text-[105%] font-bold text-C_TextBlackFade transition-transform duration-300 ease-in-out first-letter:capitalize 
             ${
               toggleContactList
-                ? 'scale-110 border-none bg-C_DarkBlue text-C_TextWhiteDull'
-                : ''
+                ? "scale-110 border-none bg-C_DarkBlue text-C_TextWhiteDull"
+                : ""
             } `}
             onClick={() => setToggleContactList(true)}
           >
@@ -77,8 +77,8 @@ const Search = () => {
             className={`self-end rounded-xl border-2 border-C_BorderBlackFade px-3 py-1 text-[105%] font-bold text-C_TextBlackFade transition-transform duration-300 ease-in-out first-letter:capitalize
             ${
               !toggleContactList
-                ? 'scale-110 border-none bg-C_DarkBlue text-C_TextWhiteDull'
-                : ''
+                ? "scale-110 border-none bg-C_DarkBlue text-C_TextWhiteDull"
+                : ""
             } 
             `}
             onClick={() => setToggleContactList(false)}
@@ -96,7 +96,7 @@ const Search = () => {
       </div>
       <div className="h-full w-full overflow-y-scroll bg-[#bae9f8f5]">
         {toggleContactList ? (
-          followersStatus === 'success' ? (
+          followersStatus === "success" ? (
             followers?.map((follower) => {
               return (
                 <Contact
@@ -108,7 +108,7 @@ const Search = () => {
                     handleContactClick(
                       follower.id,
                       follower.login,
-                      follower.avatar_url,
+                      follower.avatar_url
                     );
                   }}
                 />
@@ -117,7 +117,7 @@ const Search = () => {
           ) : (
             <p>Loading followers...</p>
           )
-        ) : followingStatus === 'success' ? (
+        ) : followingStatus === "success" ? (
           following?.map((follow) => (
             <Contact
               key={follow.id}
@@ -137,3 +137,35 @@ const Search = () => {
   );
 };
 export default Search;
+
+export const fetchContacts = (name: string) => {
+  if (name === null) {
+    throw Error("There is no user name to fetch data");
+  }
+  const {
+    data: followersData,
+    status: followersStatus,
+    error: followersError,
+  } = useFetchFollowers(name);
+
+  //Following data
+  const {
+    data: followingData,
+    status: followingStatus,
+    error: followingError,
+  } = useFetchFollowing(name);
+
+  if (followersStatus === "success") {
+    console.log(followersData);
+  }
+  if (followersStatus === "error") {
+    console.log(followersError);
+  }
+
+  if (followingStatus === "success") {
+    console.log(followingData);
+  }
+  if (followingStatus === "error") {
+    console.log(followingError);
+  }
+};

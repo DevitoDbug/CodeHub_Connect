@@ -8,7 +8,11 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { ChangeChatRecipientAction } from "../context/ChatContext";
-import { useFetchUser } from "../api/hooks";
+import {
+  useFetchFollowers,
+  useFetchFollowing,
+  useFetchUser,
+} from "../api/hooks";
 
 interface addUserParams {
   uid: string;
@@ -105,4 +109,38 @@ export const ChangeChatRecipient = (
   if (userStatus === "error") {
     throw Error(userError.message);
   }
+};
+
+export const FetchContacts = (name: string) => {
+  if (name === null) {
+    throw Error("There is no user name to fetch data");
+  }
+  let contacts: object[] = [];
+  const {
+    data: followersData,
+    status: followersStatus,
+    error: followersError,
+  } = useFetchFollowers(name);
+
+  //Following data
+  const {
+    data: followingData,
+    status: followingStatus,
+    error: followingError,
+  } = useFetchFollowing(name);
+
+  if (followersStatus === "success") {
+    contacts = [...contacts, ...Object.values(followersData)];
+  }
+  if (followersStatus === "error") {
+    throw Error(followersError?.message);
+  }
+
+  if (followingStatus === "success") {
+    contacts = [...contacts, ...Object.values(followingData)];
+  }
+  if (followingStatus === "error") {
+    throw Error(followingError?.message);
+  }
+  return contacts;
 };
