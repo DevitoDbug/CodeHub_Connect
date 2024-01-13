@@ -13,6 +13,7 @@ import {
   useFetchFollowing,
   useFetchUser,
 } from "../api/hooks";
+import { UserInfo } from "firebase/auth";
 
 interface addUserParams {
   uid: string;
@@ -115,7 +116,15 @@ export const FetchContacts = (name: string) => {
   if (name === null) {
     throw Error("There is no user name to fetch data");
   }
-  let contacts: object[] = [];
+  //UserInfo
+  //  displayName: null,
+  // email: null,
+  // phoneNumber: null,
+  // photoURL: null,
+  // providerId: "",
+  // uid: "",
+
+  let contacts: UserInfo[] = [];
   const {
     data: followersData,
     status: followersStatus,
@@ -130,14 +139,14 @@ export const FetchContacts = (name: string) => {
   } = useFetchFollowing(name);
 
   if (followersStatus === "success") {
-    contacts = [...contacts, ...Object.values(followersData)];
+    contacts = [...(Object.values(followersData) as UserInfo[])];
   }
   if (followersStatus === "error") {
     throw Error(followersError?.message);
   }
 
   if (followingStatus === "success") {
-    contacts = [...contacts, ...Object.values(followingData)];
+    contacts = [...contacts, ...(Object.values(followingData) as UserInfo[])];
   }
   if (followingStatus === "error") {
     throw Error(followingError?.message);
