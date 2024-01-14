@@ -13,12 +13,12 @@ import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { v4 as uuid } from "uuid";
 import { handleError } from "../utils";
 
-interface uploadTextParams {
+interface UploadTextParams {
   combinedId: string;
   currentUserId: string;
   text: string;
 }
-interface uploadImageAndTextParams {
+interface UploadImageAndTextParams {
   img: Blob | Uint8Array | ArrayBuffer;
   combinedId: string;
   currentUserId: string;
@@ -44,7 +44,7 @@ export const uploadText = async ({
   combinedId,
   currentUserId,
   text,
-}: uploadTextParams) => {
+}: UploadTextParams) => {
   await updateDoc(doc(db, "chats", combinedId), {
     messages: arrayUnion({
       id: uuid(),
@@ -61,7 +61,7 @@ export const uploadImageAndText = async ({
   combinedId,
   currentUserId,
   text,
-}: uploadImageAndTextParams) => {
+}: UploadImageAndTextParams) => {
   const storageRef = ref(storage, uuid());
   const uploadTask = uploadBytesResumable(storageRef, img);
 

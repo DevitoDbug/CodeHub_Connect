@@ -13,7 +13,6 @@ interface updateUserChatsParams {
   combinedID: string;
   otherUserID: string;
   otherUserDisplayName: string;
-  otherUserNickName: string;
   otherUserEmail: string;
   otherUserPhotoURL: string;
 }
@@ -42,7 +41,6 @@ export const updateUserChats = async ({
   combinedID,
   otherUserID,
   otherUserDisplayName,
-  otherUserNickName,
   otherUserEmail,
   otherUserPhotoURL,
 }: updateUserChatsParams) => {
@@ -50,7 +48,6 @@ export const updateUserChats = async ({
     [combinedID + ".userInfo"]: {
       id: otherUserID,
       name: otherUserDisplayName,
-      login: otherUserNickName,
       email: otherUserEmail,
       avatar_url: otherUserPhotoURL,
     },

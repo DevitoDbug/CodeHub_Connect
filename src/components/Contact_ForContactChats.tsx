@@ -1,8 +1,9 @@
 import { FC, useContext } from "react";
 import { NavContext } from "../pages/Home";
-import { ChatContext, UserInfo } from "../context/ChatContext";
+import { ChatContext } from "../context/ChatContext";
 import { ChangeChatRecipient } from "../firebase/users";
 import { Timestamp } from "firebase/firestore";
+import { UserInfo } from "firebase/auth";
 
 interface Contact_ForContactChatsParams {
   userInfo: UserInfo;
@@ -28,7 +29,10 @@ export const Contact_ForContactChats: FC<Contact_ForContactChatsParams> = ({
 
   const handleContactSelected = () => {
     //Set the user in the chat context
-    ChangeChatRecipient(userInfo.login, dispatch);
+    if (!userInfo.displayName) {
+      throw Error("Selected user is null");
+    }
+    ChangeChatRecipient(userInfo.displayName, dispatch);
 
     //Navigate to the chat page
     scrollToMessageSection();
@@ -44,7 +48,7 @@ export const Contact_ForContactChats: FC<Contact_ForContactChatsParams> = ({
     >
       <div className="flex flex-row gap-2">
         <img
-          src={userInfo?.avatar_url}
+          src={userInfo?.photoURL || ""}
           alt=""
           className={`rounded-full border-2 border-C_Gold object-cover ${
             isSelected ? "h-14 w-14 " : "h-12 w-12 "
@@ -56,7 +60,7 @@ export const Contact_ForContactChats: FC<Contact_ForContactChatsParams> = ({
               isSelected ? "text-C_TextWhite" : "text-C_TextBlack"
             }`}
           >
-            {userInfo?.login}
+            {userInfo?.displayName}
           </span>
           <span
             className={`text-[0.625rem] font-light  ${

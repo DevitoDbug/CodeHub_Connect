@@ -1,7 +1,6 @@
-import React from "react";
 import ContactChats from "../components/ContactChats";
 import MessageSection from "../components/MessageSection";
-import Search from "../components/Search";
+import { Search } from "../components/Search";
 import { useContext, createContext } from "react";
 import { SearchContext } from "../context/SearchContext";
 import { CurrentPageContext } from "../context/CurrentPageContex";

@@ -9,7 +9,7 @@ import { FetchContacts as fetchContacts } from "../firebase/users";
 import { UserInfo } from "firebase/auth";
 
 export const Search: FC = () => {
-  const { currentUserBulk } = useContext(LoginContext);
+  const { currentUser } = useContext(LoginContext);
   const { setSearchOpen } = useContext(SearchContext);
   const [isActive, setIsActive] = useState("");
   const [followers, setFollowers] = useState<UserInfo[]>([]);
@@ -18,12 +18,12 @@ export const Search: FC = () => {
 
   //Update following data
   useEffect(() => {
-    if (currentUserBulk.screenName) {
-      const contact = fetchContacts(currentUserBulk.screenName);
+    if (currentUser.displayName) {
+      const contact = fetchContacts(currentUser.displayName);
       setFollowers(contact.followers);
       setFollowing(contact.following);
     }
-  }, [currentUserBulk]);
+  }, [currentUser]);
 
   const handleCloseSearch = () => {
     setSearchOpen(false);

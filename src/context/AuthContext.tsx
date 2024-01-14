@@ -9,35 +9,15 @@ export interface currentUser {
   uid: null | string;
 }
 
-export interface currentUserBulk {
-  screenName: null | string;
-  email: null | string;
-  photoURL: null | string;
-}
-
 export interface LoginContextParams {
   currentUser: currentUser;
   accessToken: string;
   setAccessToken: React.Dispatch<React.SetStateAction<string>>;
-  currentUserBulk: currentUserBulk;
 }
 
 export interface LoginContextProp {
   children: ReactNode;
 }
-
-// reloadUserInfo:
-// createdAt: ""
-// email: ""
-// emailVerified: false
-// lastLoginAt: ""
-// lastRefreshAt: ""
-// localId: ""
-// photoUrl: ""
-// providerUserInfo:
-// [{…}]
-// screenName: ""
-// validSince: ""
 
 export const LoginContext = createContext<LoginContextParams>({
   currentUser: {
@@ -48,11 +28,6 @@ export const LoginContext = createContext<LoginContextParams>({
   },
   accessToken: "",
   setAccessToken: () => {},
-  currentUserBulk: {
-    screenName: "",
-    email: "",
-    photoURL: "",
-  },
 });
 
 export const AuthContextProvider: FC<LoginContextProp> = ({ children }) => {
@@ -61,11 +36,6 @@ export const AuthContextProvider: FC<LoginContextProp> = ({ children }) => {
     email: "",
     photoURL: "",
     uid: "",
-  });
-  const [currentUserBulk, setCurrentUserBulk] = useState<currentUserBulk>({
-    screenName: "",
-    email: "",
-    photoURL: "",
   });
 
   const [accessToken, setAccessToken] = useState("");
@@ -83,13 +53,6 @@ export const AuthContextProvider: FC<LoginContextProp> = ({ children }) => {
           photoURL: userData.photoURL || "",
           uid: userData.uid || "",
         });
-
-        setCurrentUserBulk({
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          screenName: (user as any).reloadUserInfo?.screenName || "",
-          email: user.email || "",
-          photoURL: user.photoURL || "",
-        });
       } else {
         throw Error("user is undefined");
       }
@@ -99,24 +62,10 @@ export const AuthContextProvider: FC<LoginContextProp> = ({ children }) => {
     };
   }, []);
 
-  // reloadUserInfo:
-  // createdAt: ""
-  // email: ""
-  // emailVerified: false
-  // lastLoginAt: ""
-  // lastRefreshAt: ""
-  // localId: ""
-  // photoUrl: ""
-  // providerUserInfo:
-  // [{…}]
-  // screenName: ""
-  // validSince: ""
-
   const loginContextParams: LoginContextParams = {
     currentUser,
     accessToken,
     setAccessToken,
-    currentUserBulk,
   };
   return (
     <LoginContext.Provider value={loginContextParams}>
