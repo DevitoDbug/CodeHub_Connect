@@ -14,10 +14,12 @@
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@tanstack/react-query": "^5.17.9",
+    "@types/react-router-dom": "^5.3.3",
     "axios": "^1.6.5",
     "firebase": "^10.7.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.21.2",
     "react-spinners": "^0.13.8",
     "tailwind": "^4.0.0",
     "uuid": "^9.0.1"

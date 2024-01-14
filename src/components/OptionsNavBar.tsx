@@ -3,21 +3,20 @@ import {
   faSearch,
   faStar,
   faUserGroup,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
-import { useContext } from 'react';
-import { SearchContext } from '../context/SearchContext';
-import { CurrentPageContext } from '../context/CurrentPageContex';
-import { NavContext } from '../pages/Home';
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FC, useContext } from "react";
+import { SearchContext } from "../context/SearchContext";
+import { CurrentPageContext } from "../context/CurrentPageContex";
+import { NavContext } from "../pages/Home";
 
-const OptionsNavBar = () => {
+const OptionsNavBar: FC = () => {
   const { currentPage, setCurrentPage } = useContext(CurrentPageContext);
   const { scrollToMessageSection } = useContext(NavContext);
-  const [, setSearchOpen] = useContext(SearchContext);
+  const { setSearchOpen } = useContext(SearchContext);
   const handleOpenSearch = () => {
     setSearchOpen(true);
-    setCurrentPage('searchPage');
+    setCurrentPage("searchPage");
   };
 
   return (
@@ -31,7 +30,7 @@ const OptionsNavBar = () => {
         </button>
         <div
           className={`h-1 w-[75%] rounded-xl  ${
-            currentPage == 'starPage' ? 'bg-C_DarkBlue' : 'bg-transparent'
+            currentPage == "starPage" ? "bg-C_DarkBlue" : "bg-transparent"
           }`}
         ></div>
       </div>
@@ -45,7 +44,7 @@ const OptionsNavBar = () => {
         </button>
         <div
           className={`h-1 w-[75%] rounded-xl  ${
-            currentPage == 'searchPage' ? 'bg-C_DarkBlue' : 'bg-transparent'
+            currentPage == "searchPage" ? "bg-C_DarkBlue" : "bg-transparent"
           }`}
         ></div>
       </div>
@@ -59,7 +58,7 @@ const OptionsNavBar = () => {
         </button>
         <div
           className={`h-1 w-[75%] rounded-xl  ${
-            currentPage == 'groupPage' ? 'bg-C_DarkBlue' : 'bg-transparent'
+            currentPage == "groupPage" ? "bg-C_DarkBlue" : "bg-transparent"
           }`}
         ></div>
       </div>
@@ -78,7 +77,7 @@ const OptionsNavBar = () => {
         </button>
         <div
           className={`h-1 w-[75%] rounded-xl  ${
-            currentPage == 'contactPage' ? 'bg-C_DarkBlue' : 'bg-transparent'
+            currentPage == "contactPage" ? "bg-C_DarkBlue" : "bg-transparent"
           }`}
         ></div>
       </div>

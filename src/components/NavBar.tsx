@@ -1,26 +1,25 @@
-import { faToggleOff, faToggleOn } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useContext, useState } from 'react';
-import { signOut } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
-import { auth } from '../firebase';
-import { LoginContext } from '../context/AuthContext';
+import { faToggleOff, faToggleOn } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FC, useContext, useState } from "react";
+import { signOut } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { auth } from "../firebase";
+import { LoginContext } from "../context/AuthContext";
 
-const NavBar = () => {
-  //currently logged in user
+export const NavBar: FC = () => {
   const { currentUser } = useContext(LoginContext);
 
   const name = currentUser?.displayName;
   const profilePic = currentUser?.photoURL;
 
-  const [isLoggedIn, setIsloggedIn] = useState(true);
+  const [isLoggedIn, setIsloggedIn] = useState<boolean>(true);
 
   const navigate = useNavigate();
 
   const handleSignOut = () => {
     signOut(auth);
     setIsloggedIn(false);
-    navigate('/login');
+    navigate("/login");
   };
   return (
     <div className="m-1 flex h-[90%] flex-row items-center justify-between gap-2 rounded-xl bg-C_LightBlue px-1 py-1 ">
@@ -31,7 +30,7 @@ const NavBar = () => {
       <div className="flex flex-row justify-around gap-2">
         <img
           className="h-10 w-10 rounded-full border-2 border-C_Gold "
-          src={profilePic}
+          src={profilePic || ""}
           alt=""
         />
         <div className="items-left flex flex-col">
@@ -53,4 +52,3 @@ const NavBar = () => {
     </div>
   );
 };
-export default NavBar;
