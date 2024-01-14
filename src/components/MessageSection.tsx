@@ -1,21 +1,29 @@
-import React, { useContext, useEffect, useState } from 'react';
-import Message from './Message';
-import InputArea from './InputArea';
-import { ChatContext } from '../context/ChatContext';
-import { db } from '../firebase';
-import { doc, onSnapshot } from 'firebase/firestore';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import { NavContext } from '../pages/Home';
+import { FC, useContext, useEffect, useState } from "react";
+import Message from "./Message";
+import InputArea from "./InputArea";
+import { ChatContext } from "../context/ChatContext";
+import { db } from "../firebase";
+import { Timestamp, doc, onSnapshot } from "firebase/firestore";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { NavContext } from "../pages/Home";
 
-const MessageSection = () => {
+export interface MessageData {
+  date: Timestamp;
+  id: string;
+  senderId: string;
+  text: string;
+  imageURL: string;
+}
+
+const MessageSection: FC = () => {
   const { data } = useContext(ChatContext);
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<MessageData[]>([]);
   const { scrollToContactSection } = useContext(NavContext);
-  let lastSender = '';
+  let lastSender = "";
 
   useEffect(() => {
-    const unSub = onSnapshot(doc(db, 'chats', data.combinedId), (doc) => {
+    const unSub = onSnapshot(doc(db, "chats", data.combinedId), (doc) => {
       doc.exists() && setMessages(doc.data().messages);
     });
     return () => {
@@ -44,9 +52,9 @@ const MessageSection = () => {
 
             return (
               <Message
-                key={message?.id}
+                key={message.id}
                 message={message}
-                data={data.userInfo}
+                user={data.userInfo}
                 displayMetaData={!isSameSender}
               />
             );
