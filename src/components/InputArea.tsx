@@ -13,7 +13,7 @@ import {
 } from "../firebase/userChats";
 import { uploadImageAndText, uploadText } from "../firebase/chat";
 
-const InputArea = () => {
+export const InputArea = () => {
   const { data } = useContext(ChatContext);
   const { currentUser } = useContext(LoginContext);
 
@@ -127,5 +127,3 @@ const InputArea = () => {
     </div>
   );
 };
-
-export default InputArea;

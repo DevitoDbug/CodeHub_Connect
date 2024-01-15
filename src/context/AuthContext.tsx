@@ -2,7 +2,7 @@ import { FC, ReactNode, createContext, useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase";
 
-export interface currentUser {
+export interface CurrentUser {
   displayName: null | string;
   email: null | string;
   photoURL: null | string;
@@ -10,7 +10,7 @@ export interface currentUser {
 }
 
 export interface LoginContextParams {
-  currentUser: currentUser;
+  currentUser: CurrentUser;
   accessToken: string;
   setAccessToken: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -31,7 +31,7 @@ export const LoginContext = createContext<LoginContextParams>({
 });
 
 export const AuthContextProvider: FC<LoginContextProp> = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState<currentUser>({
+  const [currentUser, setCurrentUser] = useState<CurrentUser>({
     displayName: "",
     email: "",
     photoURL: "",

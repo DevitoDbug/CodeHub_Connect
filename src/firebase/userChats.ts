@@ -8,7 +8,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase";
 
-interface updateUserChatsParams {
+interface UpdateUserChatsParams {
   userID: string;
   combinedID: string;
   otherUserID: string;
@@ -17,7 +17,7 @@ interface updateUserChatsParams {
   otherUserPhotoURL: string;
 }
 
-interface updateLastMessageAndDateParams {
+interface UpdateLastMessageAndDateParams {
   userID: string;
   combinedID: string;
   lastMessage: string;
@@ -43,7 +43,7 @@ export const updateUserChats = async ({
   otherUserDisplayName,
   otherUserEmail,
   otherUserPhotoURL,
-}: updateUserChatsParams) => {
+}: UpdateUserChatsParams) => {
   await updateDoc(doc(db, "userChats", String(userID)), {
     [combinedID + ".userInfo"]: {
       id: otherUserID,
@@ -60,7 +60,7 @@ export const updateLastMessageAndDate = async ({
   userID,
   combinedID,
   lastMessage,
-}: updateLastMessageAndDateParams) => {
+}: UpdateLastMessageAndDateParams) => {
   await updateDoc(doc(db, "userChats", String(userID)), {
     [combinedID + ".lastMessage"]: { text: lastMessage },
     [combinedID + ".date"]: serverTimestamp(),

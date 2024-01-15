@@ -1,6 +1,6 @@
 import { FC, useContext, useEffect, useState } from "react";
-import Message from "./Message";
-import InputArea from "./InputArea";
+import { Message } from "./Message";
+import { InputArea } from "./InputArea";
 import { ChatContext } from "../context/ChatContext";
 import { db } from "../firebase";
 import { Timestamp, doc, onSnapshot } from "firebase/firestore";

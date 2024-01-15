@@ -31,7 +31,7 @@ export const ChatContext = createContext<ChatContextParams>({
 export const ChatContextProider: FC<ChatContextProider> = ({ children }) => {
   const { currentUser } = useContext(LoginContext);
 
-  const reducer = (state: ChatState, action: ChangeChatRecipientAction) => {
+  const reducer = (_state: ChatState, action: ChangeChatRecipientAction) => {
     const currentUserUid: string | null = currentUser.uid;
 
     if (currentUserUid === null) {

@@ -1,5 +1,4 @@
 //CRUD operations on the chat collection in firebase
-
 import {
   Timestamp,
   arrayUnion,

@@ -8,7 +8,11 @@ interface MessageParams {
   message: MessageData;
   displayMetaData: boolean;
 }
-const Message: FC<MessageParams> = ({ user, message, displayMetaData }) => {
+export const Message: FC<MessageParams> = ({
+  user,
+  message,
+  displayMetaData,
+}) => {
   const { currentUser } = useContext(LoginContext);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -72,5 +76,3 @@ const Message: FC<MessageParams> = ({ user, message, displayMetaData }) => {
     </div>
   );
 };
-
-export default Message;
