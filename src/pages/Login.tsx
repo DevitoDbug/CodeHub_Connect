@@ -5,8 +5,9 @@ import { signInWithGithub } from "../firebase/login.js";
 import { addUser, doesUserExist, updateUser } from "../firebase/users.js";
 import { createUserChats } from "../firebase/userChats.js";
 import { LoadingSpinner } from "../components/LoadingSpinner.js";
-import { useState } from "react";
-const Login = () => {
+import { FC, useState } from "react";
+
+export const Login: FC = () => {
   //navigate to home
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -68,5 +69,3 @@ const Login = () => {
     </div>
   );
 };
-
-export default Login;

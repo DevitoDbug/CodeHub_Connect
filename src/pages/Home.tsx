@@ -1,7 +1,7 @@
 import { ContactChats } from "../components/ContactChats";
 import { MessageSection } from "../components/MessageSection";
 import { Search } from "../components/Search";
-import { useContext, createContext } from "react";
+import { useContext, createContext, FC } from "react";
 import { SearchContext } from "../context/SearchContext";
 import { CurrentPageContext } from "../context/CurrentPageContex";
 
@@ -15,7 +15,7 @@ export const NavContext = createContext<NavContextValues>({
   scrollToContactSection: () => {},
 });
 
-const Home = () => {
+export const Home: FC = () => {
   const { searchOpen } = useContext(SearchContext);
   const { homePage, setHomePage } = useContext(CurrentPageContext);
 
@@ -54,5 +54,3 @@ const Home = () => {
     </NavContext.Provider>
   );
 };
-
-export default Home;

@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Link } from "react-router-dom";
 
-const Error: FC = () => {
+export const Error: FC = () => {
   return (
     <div className="flex flex-col items-center justify-center text-3xl">
       <span>{"Page not found :("}</span>
@@ -11,5 +11,3 @@ const Error: FC = () => {
     </div>
   );
 };
-
-export default Error;
