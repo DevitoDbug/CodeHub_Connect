@@ -10,7 +10,7 @@ import { SearchContext } from "../context/SearchContext";
 import { CurrentPageContext } from "../context/CurrentPageContex";
 import { NavContext } from "../pages/Home";
 
-const OptionsNavBar: FC = () => {
+export const OptionsNavBar: FC = () => {
   const { currentPage, setCurrentPage } = useContext(CurrentPageContext);
   const { scrollToMessageSection } = useContext(NavContext);
   const { setSearchOpen } = useContext(SearchContext);
@@ -84,5 +84,3 @@ const OptionsNavBar: FC = () => {
     </div>
   );
 };
-
-export default OptionsNavBar;

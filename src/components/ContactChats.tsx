@@ -1,12 +1,12 @@
 import { useContext, useEffect, useState } from "react";
-import NavBar from "./NavBar";
-import OptionsNavBar from "./OptionsNavBar";
+import { NavBar } from "./NavBar";
+import { OptionsNavBar } from "./OptionsNavBar";
 import { DocumentData, doc, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase";
 import { LoginContext } from "../context/AuthContext";
 import { Contact_ForContactChats } from "./Contact_ForContactChats";
 
-const ContactChats = () => {
+export const ContactChats = () => {
   const [chats, setChats] = useState<DocumentData | undefined>([]);
   const { currentUser } = useContext(LoginContext);
 
@@ -63,5 +63,3 @@ const ContactChats = () => {
     </aside>
   );
 };
-
-export default ContactChats;

@@ -16,7 +16,7 @@ export interface MessageData {
   imageURL: string;
 }
 
-const MessageSection: FC = () => {
+export const MessageSection: FC = () => {
   const { data } = useContext(ChatContext);
   const [messages, setMessages] = useState<MessageData[]>([]);
   const { scrollToContactSection } = useContext(NavContext);
@@ -66,5 +66,3 @@ const MessageSection: FC = () => {
     </div>
   );
 };
-
-export default MessageSection;
