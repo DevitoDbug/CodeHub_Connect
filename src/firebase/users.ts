@@ -7,20 +7,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../firebase";
-import { ChangeChatRecipientAction } from "../context/ChatContext";
-import {
-  useFetchFollowers,
-  useFetchFollowing,
-  useFetchUser,
-} from "../api/hooks";
 import { UserInfo } from "firebase/auth";
-
-interface AddUserParams {
-  uid: string;
-  displayName: string;
-  email: string;
-  photoURL: string;
-}
 
 interface UpdateUserParams {
   uid: string;
@@ -29,10 +16,10 @@ interface UpdateUserParams {
   photoURL: string;
 }
 
-interface Contact {
-  followers: UserInfo[];
-  following: UserInfo[];
-}
+// interface Contact {
+//   followers: UserInfo[];
+//   following: UserInfo[];
+//}
 
 //Check if user exitst in firebase user collection
 export const doesUserExist = async (id: string) => {
@@ -48,7 +35,7 @@ export const addUser = async ({
   displayName,
   email,
   photoURL,
-}: AddUserParams) => {
+}: UserInfo) => {
   await setDoc(doc(db, "users", String(uid)), {
     displayName,
     email,
@@ -92,58 +79,46 @@ export const deleteUser = async (uid: string) => {
   });
 };
 
-export const ChangeChatRecipient = (
-  name: string,
-  dispatch: React.Dispatch<ChangeChatRecipientAction>
-) => {
-  //fetched user data
-  const {
-    data: userData,
-    status: userStatus,
-    error: userError,
-  } = useFetchUser(name);
+// export const ChangeChatRecipient = (
+//   name: UserInfo,
+//   dispatch: React.Dispatch<ChangeChatRecipientAction>
+// ) => {
+//   dispatch({ type: "CHANGE_CHAT_RECIPIENT", payload: name });
+// };
 
-  if (userStatus === "success") {
-    dispatch({ type: "CHANGE_CHAT_RECIPIENT", payload: userData });
-  }
-  if (userStatus === "error") {
-    throw Error(userError.message);
-  }
-};
+// export const useFetchContacts = (name: string): Contact => {
+//   if (name === null) {
+//     throw Error("There is no user name to fetch data");
+//   }
 
-export const FetchContacts = (name: string): Contact => {
-  if (name === null) {
-    throw Error("There is no user name to fetch data");
-  }
+//   let followers: UserInfo[] = [];
+//   let following: UserInfo[] = [];
 
-  let followers: UserInfo[] = [];
-  let following: UserInfo[] = [];
+//   const {
+//     data: followersData,
+//     status: followersStatus,
+//     error: followersError,
+//   } = useFetchFollowers(name);
 
-  const {
-    data: followersData,
-    status: followersStatus,
-    error: followersError,
-  } = useFetchFollowers(name);
+//   //Following data
+//   const {
+//     data: followingData,
+//     status: followingStatus,
+//     error: followingError,
+//   } = useFetchFollowing(name);
 
-  //Following data
-  const {
-    data: followingData,
-    status: followingStatus,
-    error: followingError,
-  } = useFetchFollowing(name);
+//   if (followersStatus === "success") {
+//     followers = followersData;
+//   }
+//   if (followersStatus === "error") {
+//     throw Error(followersError.message);
+//   }
 
-  if (followersStatus === "success") {
-    followers = followersData;
-  }
-  if (followersStatus === "error") {
-    throw Error(followersError.message);
-  }
-
-  if (followingStatus === "success") {
-    following = followingData;
-  }
-  if (followingStatus === "error") {
-    throw Error(followingError.message);
-  }
-  return { followers, following };
-};
+//   if (followingStatus === "success") {
+//     following = followingData;
+//   }
+//   if (followingStatus === "error") {
+//     throw Error(followingError.message);
+//   }
+//   return { followers, following };
+// };

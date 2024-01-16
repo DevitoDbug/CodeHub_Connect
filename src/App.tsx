@@ -16,9 +16,10 @@ export const App: FC = () => {
   const loginContex = useContext(LoginContext);
 
   const ProtectedRoute = ({ children }: ProtectedRouteParam): ReactNode => {
-    if (!loginContex.currentUser) {
+    if (!loginContex.currentUser.uid) {
       return <Navigate to="/login" />;
     }
+
     return children;
   };
 

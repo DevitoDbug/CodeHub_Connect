@@ -5,8 +5,8 @@ import { useContext } from "react";
 import { SearchContext } from "../context/SearchContext";
 import { Contact } from "./Contact";
 import { LoginContext } from "../context/AuthContext";
-import { FetchContacts as fetchContacts } from "../firebase/users";
 import { UserInfo } from "firebase/auth";
+import { useFetchFollowers, useFetchFollowing } from "../api/hooks";
 
 export const Search: FC = () => {
   const { currentUser } = useContext(LoginContext);
@@ -16,14 +16,39 @@ export const Search: FC = () => {
   const [following, setFollowing] = useState<UserInfo[]>([]);
   const [toggleContactList, setToggleContactList] = useState(true);
 
+  //Followers data
+  const {
+    data: followersData,
+    status: followersStatus,
+    error: followersError,
+  } = useFetchFollowers(currentUser?.displayName || "");
+
+  //Following data
+  const {
+    data: followingData,
+    status: followingStatus,
+    error: followingError,
+  } = useFetchFollowing(currentUser?.displayName || "");
+
   //Update following data
   useEffect(() => {
-    if (currentUser.displayName) {
-      const contact = fetchContacts(currentUser.displayName);
-      setFollowers(contact.followers);
-      setFollowing(contact.following);
+    if (followersStatus === "success") {
+      setFollowers(Object.values(followersData));
     }
-  }, [currentUser]);
+    if (followersStatus === "error") {
+      console.error(followersError);
+    }
+  }, [followersStatus, followersData, followersError]);
+
+  //Update followers data
+  useEffect(() => {
+    if (followingStatus === "success") {
+      setFollowing(Object.values(followingData));
+    }
+    if (followingStatus === "error") {
+      console.error(followingError);
+    }
+  }, [followingStatus, followingData, followingError]);
 
   const handleCloseSearch = () => {
     setSearchOpen(false);
@@ -33,7 +58,6 @@ export const Search: FC = () => {
     setIsActive(id);
   };
 
-  useEffect(() => {}, [followers, following]);
   return (
     <div className="absolute left-[10%] top-[10%] flex h-[40%] w-[80%] flex-col items-center rounded-lg bg-[#bae9f8] px-1 py-2 shadow-lg md:left-[30%] md:w-[50%] lg:left-[30%] lg:top-[20%] lg:h-[50%] lg:w-[40%]">
       <div className="flex w-full items-start justify-between ">

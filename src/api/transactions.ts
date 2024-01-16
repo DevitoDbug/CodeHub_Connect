@@ -24,8 +24,10 @@ function mapGitHubApiResponseToUserInfo(
 export const fetchFollowers = async (username: string): Promise<UserInfo[]> => {
   let users: GitHubApiResponse[] = [];
   try {
-    const { data } = await httpClient.get(`/${username}/followers`);
-    users = data;
+    if (username.length > 0) {
+      const { data } = await httpClient.get(`/${username}/followers`);
+      users = data;
+    }
   } catch (e: unknown) {
     throw Error(handleError(e));
   }
@@ -35,8 +37,10 @@ export const fetchFollowers = async (username: string): Promise<UserInfo[]> => {
 export const fetchFollowing = async (username: string): Promise<UserInfo[]> => {
   let users: GitHubApiResponse[] = [];
   try {
-    const { data } = await httpClient.get(`/${username}/following`);
-    users = data;
+    if (username.length > 0) {
+      const { data } = await httpClient.get(`/${username}/following`);
+      users = data;
+    }
   } catch (e: unknown) {
     throw Error(handleError(e));
   }

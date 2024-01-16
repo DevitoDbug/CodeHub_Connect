@@ -21,10 +21,10 @@ export interface LoginContextProp {
 
 export const LoginContext = createContext<LoginContextParams>({
   currentUser: {
-    displayName: "",
-    email: "",
-    photoURL: "",
-    uid: "",
+    displayName: null,
+    email: null,
+    photoURL: null,
+    uid: null,
   },
   accessToken: "",
   setAccessToken: () => {},
@@ -32,10 +32,10 @@ export const LoginContext = createContext<LoginContextParams>({
 
 export const AuthContextProvider: FC<LoginContextProp> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<CurrentUser>({
-    displayName: "",
-    email: "",
-    photoURL: "",
-    uid: "",
+    displayName: null,
+    email: null,
+    photoURL: null,
+    uid: null,
   });
 
   const [accessToken, setAccessToken] = useState("");
@@ -45,13 +45,12 @@ export const AuthContextProvider: FC<LoginContextProp> = ({ children }) => {
     const unsub = onAuthStateChanged(auth, (user) => {
       if (user?.providerData[0]) {
         const userData = user.providerData[0];
-
         setCurrentUser({
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          displayName: (user as any).reloadUserInfo?.screenName || "",
-          email: userData.email || "",
-          photoURL: userData.photoURL || "",
-          uid: userData.uid || "",
+          displayName: (user as any).reloadUserInfo?.screenName,
+          email: userData.email,
+          photoURL: userData.photoURL,
+          uid: userData.uid,
         });
       } else {
         throw Error("user is undefined");

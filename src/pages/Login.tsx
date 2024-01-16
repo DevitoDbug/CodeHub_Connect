@@ -17,28 +17,42 @@ export const Login: FC = () => {
     //Sign in with github
     const loggedInUser = await signInWithGithub();
     const loggedInUserUid = loggedInUser.providerData[0].uid;
-    const loggedInUserDisplayName = loggedInUser.displayName;
+    const loggedInUserDisplayName =
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (loggedInUser as any).reloadUserInfo.screenName;
     const loggedInUserEmail = loggedInUser.email;
     const loggedInUserPhotoURL = loggedInUser.photoURL;
 
     //Add user to the users collection
     const doesUserExistInDb = await doesUserExist(loggedInUserUid);
+
     if (doesUserExistInDb) {
-      updateUser({
-        uid: loggedInUserUid,
-        displayName: loggedInUserDisplayName || "",
-        email: loggedInUserEmail || "",
-        photoURL: loggedInUserPhotoURL || "",
-      });
+      if (
+        loggedInUserDisplayName &&
+        loggedInUserEmail &&
+        loggedInUserPhotoURL
+      ) {
+        updateUser({
+          uid: loggedInUserUid,
+          displayName: loggedInUserDisplayName,
+          email: loggedInUserEmail,
+          photoURL: loggedInUserPhotoURL,
+        });
+      }
       navigate("/");
-      return;
     } else {
-      await addUser({
-        uid: loggedInUserUid,
-        displayName: loggedInUserDisplayName || "",
-        email: loggedInUserEmail || "",
-        photoURL: loggedInUserPhotoURL || "",
-      });
+      if (
+        loggedInUserDisplayName &&
+        loggedInUserEmail &&
+        loggedInUserPhotoURL
+      ) {
+        await addUser({
+          uid: loggedInUserUid,
+          displayName: loggedInUserDisplayName,
+          email: loggedInUserEmail,
+          photoURL: loggedInUserPhotoURL,
+        });
+      }
       await createUserChats(loggedInUserUid);
     }
 

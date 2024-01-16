@@ -1,5 +1,5 @@
-import { FC, useContext, useState } from "react";
-import { ChangeChatRecipient, addUser, doesUserExist } from "../firebase/users";
+import { FC, useContext } from "react";
+import { addUser, doesUserExist } from "../firebase/users";
 import { createUserChats } from "../firebase/userChats";
 import { createChat, doesChatExist } from "../firebase/chat";
 import { NavContext } from "../pages/Home";
@@ -22,15 +22,6 @@ export const Contact: FC<ContactParams> = ({
   const { setSearchOpen } = useContext(SearchContext);
   const { data, dispatch } = useContext(ChatContext);
 
-  const [user, setUser] = useState<UserInfo>({
-    displayName: null,
-    email: null,
-    phoneNumber: null,
-    photoURL: null,
-    providerId: "github",
-    uid: "",
-  });
-
   const darkBg = isSelected
     ? "rounded-xl bg-C_DarkBlue shadow-lg shadow-C_DarkBlueShadow"
     : "border-b-2 border-C_BorderLightBlue";
@@ -39,31 +30,24 @@ export const Contact: FC<ContactParams> = ({
     if (!userInfo.displayName) {
       throw Error("User name is null");
     }
-    ChangeChatRecipient(userInfo.displayName, dispatch);
-    setUser(data.userInfo);
+
+    //Change recepient
+    dispatch({ type: "CHANGE_CHAT_RECIPIENT", payload: userInfo });
 
     //Check to see if user is in the users collection
-    const userExitst = await doesUserExist(user.uid);
-    if (!userExitst && user) {
+    const userExitst = await doesUserExist(userInfo.uid);
+    if (!userExitst) {
       //Add user to the users collection
-      //addUser (uid, displayName, nickName, email, photoURL)
-      await addUser({
-        uid: user.uid || "",
-        displayName: user.displayName || "",
-        email: user.email || "",
-        photoURL: user.photoURL || "",
-      });
+      await addUser(userInfo);
 
       //Add user to the userChats collection
-      //createUserChats(id)
-      await createUserChats(user.uid);
+      await createUserChats(userInfo.uid);
     }
 
     //Check to see if there is chat between our two users in the chats collection
     const chatExists = await doesChatExist(data.combinedId);
     if (!chatExists) {
       //Add chat to the chats collection
-      //createChat(id)
       await createChat(data.combinedId);
     }
 
@@ -81,7 +65,7 @@ export const Contact: FC<ContactParams> = ({
     >
       <div className="flex flex-row gap-2">
         <img
-          src={user.photoURL ? user.photoURL : ""}
+          src={userInfo.photoURL ? userInfo.photoURL : ""}
           alt=""
           className={`rounded-full border-2 border-C_Gold object-cover ${
             isSelected ? "h-14 w-14 " : "h-12 w-12 "
@@ -93,7 +77,7 @@ export const Contact: FC<ContactParams> = ({
               isSelected ? "text-C_TextWhite" : "text-C_TextBlack"
             }`}
           >
-            {user.displayName}
+            {userInfo.displayName}
           </span>
         </div>
       </div>
