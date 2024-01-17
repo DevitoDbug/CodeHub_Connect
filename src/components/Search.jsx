@@ -32,7 +32,6 @@ const Search = () => {
   //Update followers data
   useEffect(() => {
     if (followersStatus === 'success') {
-      console.log(followersData);
       setFollowers(Object.values(followersData));
     }
     if (followersStatus === 'error') {

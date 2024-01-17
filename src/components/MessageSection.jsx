@@ -13,13 +13,14 @@ const MessageSection = () => {
   const [messages, setMessages] = useState([]);
   const { scrollToContactSection } = useContext(NavContext);
   let lastSender = '';
+  console.log(data);
 
   useEffect(() => {
     const unSub = onSnapshot(doc(db, 'chats', data.combinedId), (doc) => {
       doc.exists() && setMessages(doc.data().messages);
     });
     return () => {
-      unSub();
+      if (data.combinedId.length > 0) unSub();
       setMessages([]);
     };
   }, [data.combinedId]);

@@ -9,6 +9,7 @@ export const AuthContextProvider = ({ children }) => {
   const [currentUserBulk, setCurrentUserBulk] = useState(null);
 
   const [accessToken, setAccessToken] = useState(null);
+  console.log('user');
 
   //.providerData[0] has the following
   // displayName: null;
