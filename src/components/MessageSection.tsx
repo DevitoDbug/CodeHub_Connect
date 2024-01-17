@@ -22,10 +22,14 @@ export const MessageSection: FC = () => {
   const { scrollToContactSection } = useContext(NavContext);
   let lastSender = "";
 
+  //TODO clean clean code here
   useEffect(() => {
-    const unSub = onSnapshot(doc(db, "chats", data.combinedId), (doc) => {
-      doc.exists() && setMessages(doc.data().messages);
-    });
+    const unSub =
+      data.combinedId.length > 0
+        ? onSnapshot(doc(db, "chats", data.combinedId), (doc) => {
+            doc.exists() && setMessages(doc.data().messages);
+          })
+        : () => {};
     return () => {
       unSub();
       setMessages([]);

@@ -6,6 +6,7 @@ import { NavContext } from "../pages/Home";
 import { SearchContext } from "../context/SearchContext";
 import { ChatContext } from "../context/ChatContext";
 import { UserInfo } from "firebase/auth";
+import { LoginContext } from "../context/AuthContext";
 
 interface ContactParams {
   userInfo: UserInfo;
@@ -18,9 +19,10 @@ export const Contact: FC<ContactParams> = ({
   isSelected,
   onClick,
 }: ContactParams) => {
+  const { currentUser } = useContext(LoginContext);
   const { scrollToMessageSection } = useContext(NavContext);
   const { setSearchOpen } = useContext(SearchContext);
-  const { data, dispatch } = useContext(ChatContext);
+  const { dispatch } = useContext(ChatContext);
 
   const darkBg = isSelected
     ? "rounded-xl bg-C_DarkBlue shadow-lg shadow-C_DarkBlueShadow"
@@ -44,11 +46,17 @@ export const Contact: FC<ContactParams> = ({
       await createUserChats(userInfo.uid);
     }
 
-    //Check to see if there is chat between our two users in the chats collection
-    const chatExists = await doesChatExist(data.combinedId);
-    if (!chatExists) {
-      //Add chat to the chats collection
-      await createChat(data.combinedId);
+    if (currentUser.uid && userInfo.uid) {
+      const combinedId =
+        currentUser.uid > userInfo.uid
+          ? currentUser?.uid + userInfo.uid
+          : userInfo.uid + currentUser.uid;
+
+      const chatExists = await doesChatExist(combinedId); //null for data
+      if (!chatExists) {
+        //Add chat to the chats collection
+        await createChat(combinedId);
+      }
     }
 
     //Navigate to the chat page
