@@ -46,8 +46,6 @@ export const Contact: FC<ContactParams> = ({
       await createUserChats(userInfo.uid);
     }
 
-    console.log(userInfo.uid, currentUser.uid);
-
     if (currentUser.uid && userInfo.uid) {
       const combinedId: string =
         currentUser.uid > userInfo.uid
