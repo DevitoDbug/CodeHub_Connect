@@ -24,6 +24,8 @@ interface UploadImageAndTextParams {
   text: string;
 }
 
+// interface GetChatsParams {}
+
 //Create message in the chat as an empty array
 export const createChat = async (uid: string) => {
   await setDoc(doc(db, "chats", uid), {
@@ -37,6 +39,10 @@ export const doesChatExist = async (id: string) => {
   const docSnap = await getDoc(docRef);
   return docSnap.exists();
 };
+
+// export const getChats =  async(params: GitHubApiResponse) {
+
+// }
 
 //Upload text message to the chat collection in firebase
 export const uploadText = async ({

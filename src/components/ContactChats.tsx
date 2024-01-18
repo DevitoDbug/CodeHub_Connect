@@ -44,11 +44,12 @@ export const ContactChats = () => {
             Object.entries(chats)
               ?.sort((a, b) => b[1].date - a[1].date)
               .map((user) => {
+                console.log(user);
                 return (
                   <Contact_ForContactChats
                     key={user[0]}
                     userInfo={user[1].userInfo}
-                    lastMessage={user[1].lastMessage.text}
+                    lastMessage={user[1].lastMessage?.text || ""}
                     lastMessageDate={user[1].date}
                     isSelected={isActive === user[0]}
                     onClick={() => handleContactClick(user[0])}

@@ -47,7 +47,7 @@ export const Contact: FC<ContactParams> = ({
     }
 
     if (currentUser.uid && userInfo.uid) {
-      const combinedId =
+      const combinedId: string =
         currentUser.uid > userInfo.uid
           ? currentUser?.uid + userInfo.uid
           : userInfo.uid + currentUser.uid;

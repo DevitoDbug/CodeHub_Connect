@@ -2,7 +2,7 @@ import { UserInfo } from "firebase/auth";
 import { handleError } from "../utils";
 import { httpClient } from "./http-client";
 
-type GitHubApiResponse = {
+export type GitHubApiResponse = {
   avatar_url: string;
   id: number;
   login: string;
