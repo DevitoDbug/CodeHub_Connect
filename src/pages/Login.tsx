@@ -51,6 +51,8 @@ export const Login: FC = () => {
           displayName: loggedInUserDisplayName,
           email: loggedInUserEmail,
           photoURL: loggedInUserPhotoURL,
+          phoneNumber: "",
+          providerId: "",
         });
       }
       await createUserChats(loggedInUserUid);
