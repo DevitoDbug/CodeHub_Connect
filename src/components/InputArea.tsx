@@ -21,6 +21,7 @@ export const InputArea = () => {
   const [img, setImage] = useState<File>();
 
   const handleSend = async () => {
+    console.log(data, currentUser);
     if (!data) {
       throw Error("data from ChatContextParams missing");
     }

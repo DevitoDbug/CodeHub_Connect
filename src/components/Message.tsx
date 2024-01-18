@@ -25,13 +25,13 @@ export const Message: FC<MessageParams> = ({
   return (
     <div
       ref={ref}
-      className={`sms ${
-        currentUser.uid === message.senderId ? "owner-sms" : ""
-      } ${displayMetaData ? " pt-5" : "pt-[2px]"}`}
+      className={`sms ${currentUser.uid === message.id ? "owner-sms" : ""} ${
+        displayMetaData ? " pt-5" : "pt-[2px]"
+      }`}
     >
       {displayMetaData && (
         <span className="sms-user-name ">
-          {currentUser.uid === message.senderId
+          {currentUser.uid === message.id
             ? currentUser.displayName
             : user.displayName}
         </span>
@@ -41,7 +41,7 @@ export const Message: FC<MessageParams> = ({
         {displayMetaData ? (
           <img
             src={
-              currentUser.uid === message.senderId
+              currentUser.uid === message.id
                 ? currentUser.photoURL || ""
                 : user.photoURL || ""
             }
@@ -57,7 +57,7 @@ export const Message: FC<MessageParams> = ({
               className={`sms-content-text ${
                 displayMetaData
                   ? `${
-                      currentUser.uid === message.senderId
+                      currentUser.uid === message.id
                         ? "rounded-bl-xl rounded-br-xl rounded-tl-xl rounded-tr-none"
                         : "rounded-bl-xl rounded-br-xl rounded-tl-none rounded-tr-xl"
                     }   `

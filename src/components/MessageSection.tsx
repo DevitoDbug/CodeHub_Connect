@@ -48,6 +48,7 @@ export const MessageSection: FC = () => {
         {messages &&
           messages.map((message) => {
             const isSameSender = message.senderId === lastSender;
+            console.log(message);
 
             // Only update lastSender if the sender is different
             if (!isSameSender) {
