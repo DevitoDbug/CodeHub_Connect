@@ -52,7 +52,7 @@ export const Contact: FC<ContactParams> = ({
           ? currentUser?.uid + userInfo.uid
           : userInfo.uid + currentUser.uid;
 
-      const chatExists = await doesChatExist(combinedId); //null for data
+      const chatExists = await doesChatExist(combinedId);
       if (!chatExists) {
         //Add chat to the chats collection
         await createChat(combinedId);

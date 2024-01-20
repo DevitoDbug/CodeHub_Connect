@@ -27,14 +27,12 @@ export const Contact_ForContactChats: FC<Contact_ForContactChatsParams> = ({
     : "border-b-2 border-C_BorderLightBlue";
 
   const handleContactSelected = () => {
-    //Set the user in the chat context
     if (!userInfo.displayName) {
       throw Error("Selected user is null");
     }
     //Change recepient
     dispatch({ type: "CHANGE_CHAT_RECIPIENT", payload: userInfo });
 
-    //Navigate to the chat page
     scrollToMessageSection();
   };
 
