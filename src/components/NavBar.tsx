@@ -23,9 +23,27 @@ export const NavBar: FC = () => {
   };
   return (
     <div className="m-1 flex h-[90%] flex-row items-center justify-between gap-2 rounded-xl bg-C_LightBlue px-1 py-1 ">
-      <h1 className="ml-1 flex flex-col text-xl font-bold text-C_TextBlack">
-        CodeHub
-        <div className="m-0 h-1 w-[85%] animate-pulse rounded-xl bg-C_DarkBlue"></div>
+      <h1 className="ml-1 text-xl font-bold text-C_TextBlack ">
+        <div className="flex flex-row items-end ">
+          <div
+            className="text-C_DarkBlue animate-bounce text-2xl"
+            style={{ animationDelay: "0.3s" }}
+          >
+            C
+          </div>
+          ode
+          <div
+            className="text-C_DarkBlue animate-bounce text-2xl"
+            style={{ animationDelay: "0.45s" }}
+          >
+            H
+          </div>
+          ub
+        </div>
+        <div
+          className="m-0 h-1 w-[85%] animate-pulse rounded-xl bg-C_DarkBlue"
+          style={{ animationDelay: "0.45s" }}
+        ></div>
       </h1>
       <div className="flex flex-row justify-around gap-2">
         <img
