@@ -26,14 +26,14 @@ export const NavBar: FC = () => {
       <h1 className="ml-1 text-xl font-bold text-C_TextBlack ">
         <div className="flex flex-row items-end ">
           <div
-            className="text-C_DarkBlue animate-bounce text-2xl"
+            className="text-C_DarkBlue animate-bounce text-2xl h-6"
             style={{ animationDelay: "0.3s" }}
           >
             C
           </div>
           ode
           <div
-            className="text-C_DarkBlue animate-bounce text-2xl"
+            className="text-C_DarkBlue animate-bounce text-2xl h-6"
             style={{ animationDelay: "0.45s" }}
           >
             H
