@@ -13,12 +13,12 @@ interface ProtectedRouteParam {
 }
 
 export const App: FC = () => {
-  const loginContex = useContext(LoginContext);
+  // const loginContex = useContext(LoginContext);
 
   const ProtectedRoute = ({ children }: ProtectedRouteParam): ReactNode => {
-    if (!loginContex.currentUser.uid) {
-      return <Navigate to="/login" />;
-    }
+    // if (!loginContex.currentUser.uid) {
+    // return <Navigate to="/login" />;
+    // }
 
     return children;
   };

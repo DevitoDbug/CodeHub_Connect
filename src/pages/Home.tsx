@@ -31,12 +31,12 @@ export const Home: FC = () => {
     <NavContext.Provider
       value={{ scrollToMessageSection, scrollToContactSection }}
     >
-      <div className="mb-1 mt-1 h-[100svh] w-screen ">
+      <div className=" h-[100svh] w-[100svw] bg-green-700 ">
         <div className="relative flex h-[100svh] w-full flex-row ">
           <div
-            className={`${
+            className={` ${
               homePage ? "block" : " hidden"
-            } h-full w-full md:block md:w-2/6`}
+            } h-full w-full bg-red-500 p-1 md:block md:w-2/6`}
           >
             <ContactChats />
           </div>

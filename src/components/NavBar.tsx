@@ -22,18 +22,18 @@ export const NavBar: FC = () => {
     navigate("/login");
   };
   return (
-    <div className="m-1 flex h-[90%] flex-row items-center justify-between gap-2 rounded-xl bg-C_LightBlue px-1 py-1 ">
+    <div className="flex h-[90%] flex-row items-center justify-between gap-2 rounded-xl bg-C_LightBlue px-1 py-1 ">
       <h1 className="ml-1 text-xl font-bold text-C_TextBlack ">
-        <div className="flex flex-row items-end ">
+        <div className="flex flex-row items-end md:text-lg lg:text-2xl">
           <div
-            className="text-C_DarkBlue animate-bounce text-2xl h-6"
+            className="h-6 animate-bounce text-2xl text-C_DarkBlue"
             style={{ animationDelay: "0.3s" }}
           >
             C
           </div>
           ode
           <div
-            className="text-C_DarkBlue animate-bounce text-2xl h-6"
+            className="h-6 animate-bounce text-2xl text-C_DarkBlue"
             style={{ animationDelay: "0.45s" }}
           >
             H
@@ -51,15 +51,15 @@ export const NavBar: FC = () => {
           src={profilePic || ""}
           alt=""
         />
-        <div className="items-left flex flex-col">
-          <h2 className="w-[6.625rem] font-semibold text-C_TextBlack ">
+        <div className="flex flex-col items-start ">
+          <h2 className="w-[6.625rem] font-semibold text-C_TextBlack md:w-[5rem] md:text-xs lg:w-[6.625rem] lg:text-lg">
             {name}
           </h2>
           <button
             onClick={handleSignOut}
-            className="flex w-[90%] items-center justify-between rounded-3xl bg-C_DarkBlue px-2 py-1 text-sm font-thin text-C_TextWhite md:p-2 "
+            className="flex w-[90%] items-center justify-between rounded-3xl bg-C_DarkBlue px-2 py-1 text-sm font-thin text-C_TextWhite md:p-1 "
           >
-            <span className="">log Out</span>
+            <span className="md:text-xs lg:text-lg">log Out</span>
             <FontAwesomeIcon
               icon={isLoggedIn ? faToggleOff : faToggleOn}
               className="ml-2 text-C_Gold"
