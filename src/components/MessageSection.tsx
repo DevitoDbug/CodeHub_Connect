@@ -37,14 +37,14 @@ export const MessageSection: FC = () => {
   }, [data.combinedId]);
 
   return (
-    <div className="relative h-full w-full p-2 md:w-full">
+    <div className="relative flex h-full flex-col  px-2">
       <button
         className="absolute flex h-9 w-9 items-center justify-center rounded-full bg-C_DarkBlue text-lg text-C_TextWhiteDull md:hidden "
         onClick={scrollToContactSection}
       >
         <FontAwesomeIcon icon={faArrowLeft} />
       </button>
-      <div className="h-[90%] overflow-y-scroll sm:h-[85vh] md:h-[93vh] lg:h-[90vh]">
+      <div className="h-full overflow-y-scroll ">
         {messages &&
           messages.map((message) => {
             const isSameSender = message.senderId === lastSender;
@@ -64,7 +64,7 @@ export const MessageSection: FC = () => {
             );
           })}
       </div>
-      <div className="sticky bottom-0 m-0 h-[10%] w-full p-0 sm:h-[15vh] md:h-[7vh] md:w-[full%] lg:h-[10vh]">
+      <div className=" bottom-0 h-[10%] w-full">
         <InputArea />
       </div>
     </div>

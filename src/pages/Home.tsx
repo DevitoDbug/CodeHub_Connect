@@ -31,12 +31,12 @@ export const Home: FC = () => {
     <NavContext.Provider
       value={{ scrollToMessageSection, scrollToContactSection }}
     >
-      <div className=" h-[100svh] w-[100svw] bg-green-700 ">
+      <div className=" h-[100svh] w-[100svw]  ">
         <div className="relative flex h-[100svh] w-full flex-row ">
           <div
             className={` ${
               homePage ? "block" : " hidden"
-            } h-full w-full bg-red-500 p-1 md:block md:w-2/6`}
+            } h-full w-full p-1 md:block md:w-2/6`}
           >
             <ContactChats />
           </div>
@@ -44,7 +44,7 @@ export const Home: FC = () => {
           <div
             className={`${
               homePage ? "hidden" : "block"
-            } h-full w-full md:block md:w-4/6 `}
+            } h-[100svh] w-screen  md:block md:w-4/6`}
           >
             <MessageSection />
           </div>
